@@ -1,7 +1,9 @@
 #include "main.hpp"
 
+
 int main()
 {
-    std::cout << "bismillah" << std::endl;
+    ft::vector<int> v;
+    
     return (0);
 }
