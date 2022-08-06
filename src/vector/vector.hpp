@@ -15,7 +15,7 @@ namespace ft
       Alloc _alloc;
       std::size_t _size;
       std::size_t _capacity;
-      std::size_t _maxSize;
+      std::size_t _max_size;
       typedef typename std::iterator<std::random_access_iterator_tag, T> iterator;
       typedef typename Alloc::pointer pointer;
       iterator _end;
@@ -34,12 +34,12 @@ namespace ft
 
    public:
       explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _maxSize(0) {
-
+         _max_size = _alloc.max_size();
       }
       ~vector() {
          std::cout << "Destructor _pointer= " << *_pointer << std::endl;
-         _alloc.deallocate(_pointer, _capacity);
-         _alloc.destroy(_pointer);
+         //_alloc.deallocate(_pointer, _capacity);
+         //_alloc.destroy(_pointer);
          //system(("leaks " + std::to_string(getpid())).c_str());
 
       }
@@ -50,16 +50,32 @@ namespace ft
          {
             _capacity++;
             _pointer = _alloc.allocate(_capacity);
-            std::cout << "1 - capacity= " << _capacity << std::endl;
+            
          }
          if (_size == _capacity)
          {
             _capacity *= 2;
             _alloc.allocate(_capacity);
-            std::cout << "2 - _capacity= " << _capacity << std::endl;
+            
          }
          construct(value);
       }
+
+      void pop_back() {
+         Alloc temp;
+         pointer t = temp.allocate(_capacity);
+         for (size_t i=0; i < _size - 1; i++)
+            temp.construct(t + i, *(_pointer + i));
+         _alloc.deallocate(_pointer, _capacity);
+         _alloc = temp;
+         _pointer = t;
+         _size--;
+      }
+
+      size_type max_size() const {
+         return this->_max_size;
+      }
+
 
       iterator begin()
       {
