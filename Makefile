@@ -14,10 +14,10 @@ $(NAME) : $(OBJS)
 	$(CPP) $(FLAGS) -c $< -o $(OBJS)
 
 push: fclean $(NAME)
-	git add *
+	@git add *
 	git status
-	git commit -m "$(M)"
-	git push
+	@git commit -m "$(M)"
+	@git push
 
 re: fclean $(NAME)
 	@clear && ./$(NAME)
