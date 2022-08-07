@@ -17,7 +17,7 @@ push: fclean $(NAME)
 	@git add *
 	@git status
 	@git commit -m "$(M)"
-	@git push
+	@git push | grep "Total"
 
 re: fclean $(NAME)
 	@clear && ./$(NAME)
