@@ -33,11 +33,11 @@ namespace ft
       }
 
    public:
-      explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _maxSize(0) {
+      explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0) {
          _max_size = _alloc.max_size();
       }
       ~vector() {
-         std::cout << "Destructor _pointer= " << *_pointer << std::endl;
+         std::cout << "Destructor is reached" << std::endl;
          //_alloc.deallocate(_pointer, _capacity);
          //_alloc.destroy(_pointer);
          //system(("leaks " + std::to_string(getpid())).c_str());
@@ -76,6 +76,45 @@ namespace ft
          return this->_max_size;
       }
 
+      size_type capacity() const {
+         return this->_capacity;
+      }
+
+      bool empty() const {
+         return this->_size == 0;
+      }
+
+
+      void reserve (size_type n) {
+         if (n > _capacity)
+         {
+            Alloc temp;
+            pointer t = temp.allocate(n);
+            for (size_t i = 0; i < _size; i++)
+               temp.construct(t + i, *(_pointer + i));
+            _alloc.deallocate(_pointer, _capacity);
+            _alloc = temp;
+            _pointer = t;
+            _capacity = n;
+         }
+      }
+
+      void resize (size_type n, value_type val = value_type()) {
+         if (n < _size)
+         {
+            for (size_t i=n; i<_size; i++)
+               this->pop_back();
+         }
+         else
+         {
+            if (n >= _capacity)
+               this->reserve(n);
+            for (size_t i=_size; i<n; i++)
+               _alloc.construct(_pointer+i, val);
+         }
+         _size = n;
+      }
+
 
       iterator begin()
       {
@@ -95,6 +134,27 @@ namespace ft
       reference at(size_type n)
       {
          return (*(this->_pointer + n));
+      }
+
+      reference operator[] (size_type n) {
+         return this->at(n);
+      }
+      const_reference operator[] (size_type n) const {
+         return this->at(n);
+      }
+
+      reference front() {
+         return this->at(0);
+      }
+      const_reference front() const {
+         return this->at(0);
+      }
+
+      reference back(){
+         return this->at(_size - 1);
+      }
+      const_reference back() const{
+         return this->at(_size - 1);
       }
    };
 
