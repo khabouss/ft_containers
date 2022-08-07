@@ -8,20 +8,17 @@ int main()
     std::cout << "------------- MAIN -------------" << std::endl;
 
     ft::vector<std::string> myvector;
+    ft::vector<std::string> myvector2;
 
-    // set some initial content:
-    for (int i = 1; i < 10; i++)
-        myvector.push_back(std::to_string(i));
+    myvector.push_back("1");
+    myvector.push_back("2");
+    myvector.push_back("3");
+    myvector.push_back("4");
+    myvector.push_back("5");
+    myvector.push_back("6");
+    myvector.push_back("7");
 
-    myvector.resize(5);
-
-    std::cout << "myvector contains:";
-    for (size_t i = 0; i < myvector.size(); i++)
-        std::cout << " [" << myvector[i] << "]";
-    std::cout << '\n';
-
-    std::cout << "back() -> " << myvector.back() << std::endl;
-    std::cout << "front() -> " << myvector.front() << std::endl;
+    //myvector2.assign(myvector.begin(), myvector.end());
 
     std::cout << "------------- MAIN -------------" << std::endl;
     return (0);
