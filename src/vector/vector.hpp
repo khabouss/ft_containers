@@ -44,12 +44,10 @@ class vector {
        if (_size == 0) {
           _capacity++;
           _pointer = _alloc.allocate(_capacity);
-          
        }
        if (_size == _capacity) {
           _capacity *= 2;
           _alloc.allocate(_capacity);
-          
        }
        construct(value);
     }
