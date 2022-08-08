@@ -1,5 +1,6 @@
 // Copyright 2022 Taha Khabouss
-#include "main.hpp"
+#include <iostream>
+#include "../src/vector/vector.hpp"
 
 int main() {
     std::cout << "------------- MAIN -------------" << std::endl;
