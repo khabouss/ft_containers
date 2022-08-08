@@ -1,3 +1,4 @@
+// Copyright 2022 Taha Khabouss
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 

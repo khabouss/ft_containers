@@ -1,3 +1,4 @@
+// Copyright 2022 Taha Khabouss
 #include "main.hpp"
 
 int main()

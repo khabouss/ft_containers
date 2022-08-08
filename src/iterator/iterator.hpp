@@ -1,14 +1,14 @@
-#ifndef ITERATOR
-#define ITERATOR
+// Copyright 2022 Taha Khabouss
+#ifndef SRC_ITERATOR_ITERATOR_HPP_
+#define SRC_ITERATOR_ITERATOR_HPP_
 
 #include <iostream>
 
-namespace ft
-{
-    template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T *, class Reference = T &>
-    class iterator
-    {
-    private:
+namespace ft {
+    template <class Category, class T, class Distance = ptrdiff_t
+    , class Pointer = T *, class Reference = T &>
+    class iterator {
+     private:
         typedef T value_type;
         typedef Distance difference_type;
         typedef Pointer pointer;
@@ -16,9 +16,9 @@ namespace ft
         typedef Category iterator_category;
         pointer _ptr;
 
-    public:
+     public:
         iterator(void) : _ptr(NULL) {}
-        iterator(pointer ptr) : _ptr(ptr) {}
+        explicit iterator(pointer ptr) : _ptr(ptr) {}
         ~iterator() {}
         iterator(const iterator & ptr) {
             this->_ptr = ptr.getPointer();
@@ -26,14 +26,25 @@ namespace ft
         pointer getPointer() const {
             return this->_ptr;
         }
-        iterator& operator++() {++this->_ptr;return *this;}
-        bool operator==(const iterator &rhs) const { return _ptr == rhs.getPointer(); }
-        bool operator!=(const iterator &rhs) const { return _ptr != rhs.getPointer(); }
-        difference_type operator-(const iterator &rhs) const { return _ptr - rhs.getPointer(); }
-        difference_type operator+(const iterator &rhs) const { return _ptr + rhs.getPointer(); }
-      
-        iterator operator+(const size_t n) { return iterator(_ptr + n); }
-        iterator operator-(const size_t n) { return iterator(_ptr - n); }
+        iterator& operator++() {++this->_ptr;return *this; }
+        bool operator==(const iterator &rhs) const {
+            return _ptr == rhs.getPointer();
+        }
+        bool operator!=(const iterator &rhs) const {
+            return _ptr != rhs.getPointer();
+        }
+        difference_type operator-(const iterator &rhs) const {
+            return _ptr - rhs.getPointer();
+        }
+        difference_type operator+(const iterator &rhs) const {
+            return _ptr + rhs.getPointer();
+        }
+        iterator operator+(const size_t n) {
+            return iterator(_ptr + n);
+        }
+        iterator operator-(const size_t n) {
+            return iterator(_ptr - n);
+        }
         
         value_type &operator*() { return *_ptr; }
     };
@@ -43,6 +54,6 @@ namespace ft
     struct forward_iterator_tag{};
     struct output_iterator_tag {};
     struct input_iterator_tag {};
-}
+}   // namespace ft
 
-#endif
+#endif  // SRC_ITERATOR_ITERATOR_HPP_
