@@ -1,16 +1,14 @@
 // Copyright 2022 Taha Khabouss
-#ifndef VECTOR_HPP
-#define VECTOR_HPP
+#ifndef SRC_VECTOR_VECTOR_HPP_
+#define SRC_VECTOR_VECTOR_HPP_
 
 #include <iostream>
 #include "../iterator/iterator.hpp"
 
-namespace ft
-{
+namespace ft {
    template <class T, class Alloc = std::allocator<T> >
-   class vector
-   {
-   private:
+   class vector {
+    private:
       Alloc _alloc;
       std::size_t _size;
       std::size_t _capacity;
@@ -24,15 +22,14 @@ namespace ft
       typedef value_type &reference;
       typedef size_t size_type;
       typedef const value_type& const_reference;
-
-      void construct(const T &value)
-      {
+      void construct(const T &value) {
          _alloc.construct(_pointer + _size, value);
          _size++;
       }
 
-   public:
-      explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _end(NULL), _begin(NULL) {
+    public:
+      explicit vector(const Alloc &alloc = std::allocator<T>()) : 
+      _alloc(alloc), _size(0), _capacity(0), _end(NULL), _begin(NULL) {
          _max_size = _alloc.max_size();
       }
       ~vector() {
@@ -40,19 +37,15 @@ namespace ft
          //_alloc.deallocate(_pointer, _capacity);
          //_alloc.destroy(_pointer);
          //system(("leaks " + std::to_string(getpid())).c_str());
-
       }
 
-      void push_back(const T &value)
-      {
-         if (_size == 0)
-         {
+      void push_back(const T &value) {
+         if (_size == 0) {
             _capacity++;
             _pointer = _alloc.allocate(_capacity);
             
          }
-         if (_size == _capacity)
-         {
+         if (_size == _capacity) {
             _capacity *= 2;
             _alloc.allocate(_capacity);
             
@@ -118,23 +111,19 @@ namespace ft
       }
 
 
-      iterator begin()
-      {
+      iterator begin() {
          return iterator(this->_pointer);
       }
 
-      iterator end()
-      {
+      iterator end() {
          return iterator(this->_pointer + _size);
       }
 
-      size_type size()
-      {
+      size_type size() {
          return this->_size;
       }
 
-      reference at(size_type n)
-      {
+      reference at(size_type n) {
          return (*(this->_pointer + n));
       }
 
@@ -152,17 +141,16 @@ namespace ft
          return this->at(0);
       }
 
-      reference back(){
+      reference back() {
          return this->at(_size - 1);
       }
-      const_reference back() const{
+      const_reference back() const {
          return this->at(_size - 1);
       }
 
       template <class InputIterator>
       void assign (InputIterator first, InputIterator last) {
-         if (_capacity != 0)
-         {
+         if (_capacity != 0) {
             _alloc.deallocate(_pointer, _capacity);
             _size = 0;
          }
@@ -170,8 +158,7 @@ namespace ft
          if (new_vector_size >= _capacity)
             _capacity = new_vector_size;
          _pointer = _alloc.allocate(_capacity);
-         for (size_t i=0; i<new_vector_size; i++)
-         {
+         for (size_t i=0; i<new_vector_size; i++) {
             // _alloc.construct(_pointer + _size, *(first + i));
             std::cout << "Val: " << *(first + i) << std::endl;
             _size++;
@@ -179,8 +166,7 @@ namespace ft
       }
 
       void assign (size_type n, const value_type& val) {
-         if (_capacity != 0)
-         {
+         if (_capacity != 0) {
             _alloc.deallocate(_pointer, _capacity);
             _size = 0;
          }
@@ -199,14 +185,12 @@ namespace ft
          if (_size + 1 > _capacity)
             new_capacity = _size + 1;
          ptr = tmp.allocate(new_capacity);
-         if (position == _begin)
-         {
+         if (position == _begin) {
             tmp.construct(ptr, val);
             for (size_t i=0; i<_size; i++)
                tmp.construct(ptr + 1 + i, _pointer + i);
          }
-         else
-         {
+         else {
             size_t i=0;
             while (_begin + i != position)
                tmp.construct(ptr + i, _pointer + i);
@@ -220,9 +204,8 @@ namespace ft
          _size++;
          _pointer = ptr;
       }
-
    };
 
 }
 
-#endif
+#endif  // SRC_VECTOR_VECTOR_HPP_
