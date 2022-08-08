@@ -1,24 +1,26 @@
 #include "main.hpp"
-#include <vector>
-
-
 
 int main()
 {
     std::cout << "------------- MAIN -------------" << std::endl;
 
-    ft::vector<std::string> myvector;
-    ft::vector<std::string> myvector2;
+    ft::vector<int> first;
+    ft::vector<int> second;
+    ft::vector<int> third;
 
-    myvector.push_back("1");
-    myvector.push_back("2");
-    myvector.push_back("3");
-    myvector.push_back("4");
-    myvector.push_back("5");
-    myvector.push_back("6");
-    myvector.push_back("7");
+    first.assign(7, 100); // 7 ints with a value of 100
 
-    //myvector2.assign(myvector.begin(), myvector.end());
+    ft::iterator<ft::random_access_iterator_tag, int> it;
+    it = first.begin() + 1;
+
+    second.assign(it, first.end() - 1); // the 5 central values of first
+
+    int myints[] = {1776, 7, 4};
+    third.assign(myints, myints + 3); // assigning from array.
+
+    std::cout << "Size of first: " << int(first.size()) << '\n';
+    std::cout << "Size of second: " << int(second.size()) << '\n';
+    std::cout << "Size of third: " << int(third.size()) << '\n';
 
     std::cout << "------------- MAIN -------------" << std::endl;
     return (0);

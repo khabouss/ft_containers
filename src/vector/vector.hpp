@@ -2,9 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
-#include <sys/types.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "../iterator/iterator.hpp"
 
 namespace ft
 {
@@ -16,7 +14,7 @@ namespace ft
       std::size_t _size;
       std::size_t _capacity;
       std::size_t _max_size;
-      typedef typename std::iterator<std::random_access_iterator_tag, T> iterator;
+      typedef ft::iterator<ft::random_access_iterator_tag, T> iterator;
       typedef typename Alloc::pointer pointer;
       iterator _end;
       iterator _begin;
@@ -33,7 +31,7 @@ namespace ft
       }
 
    public:
-      explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0) {
+      explicit vector(const Alloc &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _end(NULL), _begin(NULL) {
          _max_size = _alloc.max_size();
       }
       ~vector() {
@@ -62,6 +60,8 @@ namespace ft
       }
 
       void pop_back() {
+         if (_capacity == 0)
+            return;
          Alloc temp;
          pointer t = temp.allocate(_capacity);
          for (size_t i=0; i < _size - 1; i++)
@@ -92,7 +92,8 @@ namespace ft
             pointer t = temp.allocate(n);
             for (size_t i = 0; i < _size; i++)
                temp.construct(t + i, *(_pointer + i));
-            _alloc.deallocate(_pointer, _capacity);
+            if (_capacity != 0)
+               _alloc.deallocate(_pointer, _capacity);
             _alloc = temp;
             _pointer = t;
             _capacity = n;
@@ -157,7 +158,68 @@ namespace ft
          return this->at(_size - 1);
       }
 
-      
+      template <class InputIterator>
+      void assign (InputIterator first, InputIterator last) {
+         if (_capacity != 0)
+         {
+            _alloc.deallocate(_pointer, _capacity);
+            _size = 0;
+         }
+         size_t new_vector_size = last - first;
+         if (new_vector_size >= _capacity)
+            _capacity = new_vector_size;
+         _pointer = _alloc.allocate(_capacity);
+         for (size_t i=0; i<new_vector_size; i++)
+         {
+            // _alloc.construct(_pointer + _size, *(first + i));
+            std::cout << "Val: " << *(first + i) << std::endl;
+            _size++;
+         }
+      }
+
+      void assign (size_type n, const value_type& val) {
+         if (_capacity != 0)
+         {
+            _alloc.deallocate(_pointer, _capacity);
+            _size = 0;
+         }
+         if (n >= _capacity)
+            _capacity = n;
+         _pointer = _alloc.allocate(_capacity);
+         for (size_t i=0; i<n; i++)
+            construct(val);
+      }
+
+      iterator insert (iterator position, const value_type& val) {
+         Alloc tmp;
+         pointer ptr;
+         size_t new_capacity = _capacity;
+
+         if (_size + 1 > _capacity)
+            new_capacity = _size + 1;
+         ptr = tmp.allocate(new_capacity);
+         if (position == _begin)
+         {
+            tmp.construct(ptr, val);
+            for (size_t i=0; i<_size; i++)
+               tmp.construct(ptr + 1 + i, _pointer + i);
+         }
+         else
+         {
+            size_t i=0;
+            while (_begin + i != position)
+               tmp.construct(ptr + i, _pointer + i);
+            tmp.construct(ptr + i, val);
+            for (size_t j=i+1; j<_size; j++)
+               tmp.construct(ptr + j, _pointer + j - 1);
+         }
+         _alloc.deallocate(_capacity);
+         _alloc = tmp;
+         _capacity = new_capacity;
+         _size++;
+         _pointer = ptr;
+      }
+
    };
 
 }

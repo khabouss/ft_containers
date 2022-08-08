@@ -22,7 +22,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-push: fclean $(NAME)
+push: fclean
 	@git add *
 	@git status
 	@git commit -m "$(M)"
