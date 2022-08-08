@@ -5,4 +5,4 @@
 #include <iostream>
 #include "../src/vector/vector.hpp"
 
-#endif
+#endif  // TEST_MAIN_HPP_
