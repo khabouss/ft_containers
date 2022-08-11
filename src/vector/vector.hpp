@@ -128,32 +128,37 @@ class vector {
     const_reference back() const {
        return this->at(_size - 1);
     }
+    
     template <class InputIterator>
-    void assign(InputIterator first, InputIterator last) {
-       if (_capacity != 0) {
-          _alloc.deallocate(_pointer, _capacity);
-          _size = 0;
-       }
-       size_t new_vector_size = last - first;
-       if (new_vector_size >= _capacity)
-          _capacity = new_vector_size;
-       _pointer = _alloc.allocate(_capacity);
-       for (size_t i = 0; i < new_vector_size; i++) {
-          // _alloc.construct(_pointer + _size, *(first + i));
-          std::cout << "Val: " << *(first + i) << std::endl;
-          _size++;
-       }
+    typename std::enable_if<std::is_same<InputIterator, iterator>::value
+    , void>::type assign(InputIterator first, InputIterator last) {
+      //  if (_capacity != 0) {
+      //     _alloc.deallocate(_pointer, _capacity);
+      //     _size = 0;
+      //  }
+      //  size_t new_vector_size = last - first;
+      //  if (new_vector_size >= _capacity)
+      //     _capacity = new_vector_size;
+      //  _pointer = _alloc.allocate(_capacity);
+      //  for (size_t i = 0; i < new_vector_size; i++) {
+      //     // _alloc.construct(_pointer + _size, *(first + i));
+      //     //std::cout << "Val: " << *(first) << std::endl;
+      //     _size++;
+      //  }
+      std::cout << "Here 1 | " << *first << ", " << *last << std::endl;
     }
+   
     void assign(size_type n, const value_type& val) {
-       if (_capacity != 0) {
-          _alloc.deallocate(_pointer, _capacity);
-          _size = 0;
-       }
-       if (n >= _capacity)
-          _capacity = n;
-       _pointer = _alloc.allocate(_capacity);
-       for (size_t i = 0; i < n; i++)
-          construct(val);
+      //  if (_capacity != 0) {
+      //     _alloc.deallocate(_pointer, _capacity);
+      //     _size = 0;
+      //  }
+      //  if (n >= _capacity)
+      //     _capacity = n;
+      //  _pointer = _alloc.allocate(_capacity);
+      //  for (size_t i = 0; i < n; i++)
+      //     construct(val);
+      std::cout << "Here 2 | " << n << " " << val << std::endl;
     }
     iterator insert(iterator position, const value_type& val) {
        Alloc tmp;

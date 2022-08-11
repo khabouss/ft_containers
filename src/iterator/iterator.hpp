@@ -9,15 +9,14 @@ namespace ft {
 template <class Category, class T, class Distance = ptrdiff_t
 , class Pointer = T *, class Reference = T &>
 class iterator {
- private:
+
+ public:
     typedef T value_type;
     typedef Distance difference_type;
     typedef Pointer pointer;
     typedef Reference reference;
     typedef Category iterator_category;
-    pointer _ptr;
 
- public:
     iterator(void) : _ptr(NULL) {}
     explicit iterator(pointer ptr) : _ptr(ptr) {}
     ~iterator() {}
@@ -50,6 +49,9 @@ class iterator {
         return iterator(_ptr - n);
     }
     value_type &operator*() { return *_ptr; }
+
+ private:
+    pointer _ptr;
 };
 
 struct random_access_iterator_tag{};
