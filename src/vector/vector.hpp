@@ -128,7 +128,6 @@ class vector {
     const_reference back() const {
        return this->at(_size - 1);
     }
-    
     template <class InputIterator>
     typename std::enable_if<std::is_same<InputIterator, iterator>::value
     , void>::type assign(InputIterator first, InputIterator last) {
@@ -147,7 +146,6 @@ class vector {
       //  }
       std::cout << "Here 1 | " << *first << ", " << *last << std::endl;
     }
-   
     void assign(size_type n, const value_type& val) {
       //  if (_capacity != 0) {
       //     _alloc.deallocate(_pointer, _capacity);

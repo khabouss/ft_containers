@@ -1,13 +1,11 @@
 // Copyright 2022 Taha Khabouss
 #include <iostream>
 #include "../src/vector/vector.hpp"
-#include <vector>
 
 int main() {
     std::cout << "------------- MAIN -------------" << std::endl;
 
     ft::vector<int> first;
-    std::vector<int> v;
 
 
     first.assign(7, 100);  // 7 ints with a value of 100
