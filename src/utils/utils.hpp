@@ -32,6 +32,6 @@ struct is_same : integral_constant<bool, false> {};
 template<class T>
 struct is_same<T, T> : integral_constant<bool, true> {};
 
-} // namespace ft
+} //  namespace ft
 
-#endif // SRC_UTILS_UTILS_HPP_
+#endif //  SRC_UTILS_UTILS_HPP_

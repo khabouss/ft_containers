@@ -131,7 +131,8 @@ class vector {
     }
 
     template <class InputIterator>
-    typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type assign(InputIterator first, InputIterator last) {
+    typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type
+    assign(InputIterator first, InputIterator last) {
       if (_capacity != 0) {
          _alloc.deallocate(_pointer, _capacity);
          _size = 0;
