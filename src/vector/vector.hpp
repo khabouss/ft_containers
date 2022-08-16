@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include "../iterator/iterator.hpp"
+#include "../utils/utils.hpp"
 
 namespace ft {
 
@@ -129,8 +130,7 @@ class vector {
        return this->at(_size - 1);
     }
     template <class InputIterator>
-    typename std::enable_if<std::is_same<InputIterator, iterator>::value
-    , void>::type assign(InputIterator first, InputIterator last) {
+    typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type assign(InputIterator first, InputIterator last) {
       //  if (_capacity != 0) {
       //     _alloc.deallocate(_pointer, _capacity);
       //     _size = 0;
