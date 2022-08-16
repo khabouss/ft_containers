@@ -2,8 +2,7 @@
 #ifndef SRC_UTILS_UTILS_HPP_
 #define SRC_UTILS_UTILS_HPP_
 
-namespace ft
-{
+namespace ft {
 
 /*
 This template is designed to provide compile-time constants as types.
