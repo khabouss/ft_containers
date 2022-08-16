@@ -162,29 +162,9 @@ class vector {
     }
 
     iterator insert(iterator position, const value_type& val) {
-       Alloc tmp;
-       pointer ptr;
-       size_t new_capacity = _capacity;
-          if (_size + 1 > _capacity)
-             new_capacity = _size + 1;
-          ptr = tmp.allocate(new_capacity);
-          if (position == _begin) {
-             tmp.construct(ptr, val);
-             for (size_t i = 0; i < _size; i++)
-                tmp.construct(ptr + 1 + i, _pointer + i);
-          } else {
-             size_t i = 0;
-             while (_begin + i != position)
-                tmp.construct(ptr + i, _pointer + i);
-             tmp.construct(ptr + i, val);
-             for (size_t j = i+1; j < _size; j++)
-                tmp.construct(ptr + j, _pointer + j - 1);
-          }
-          _alloc.deallocate(_capacity);
-          _alloc = tmp;
-          _capacity = new_capacity;
-          _size++;
-          _pointer = ptr;
+      //  before this we need to left shift all elements after position
+      _alloc.construct(position.getPointer(), val);
+      return iterator(this->_pointer);
     }
 };
 

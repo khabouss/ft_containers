@@ -5,22 +5,19 @@
 int main() {
     std::cout << "------------- MAIN -------------" << std::endl;
 
-    ft::vector<int> first;
-    ft::vector<int> second;
+    ft::vector<std::string> list_of_cities;
 
+    list_of_cities.push_back("Tokyo");
+    list_of_cities.push_back("IDK");
+    list_of_cities.push_back("London");
+    list_of_cities.push_back("Paris");
+    list_of_cities.push_back("Marrakech");
 
-    first.assign(7, 100); // 7 ints with a value of 100
+    list_of_cities.insert(list_of_cities.begin() + 2, "-> Tokyo");
 
-    ft::iterator<ft::random_access_iterator_tag, int> it;
-    it = first.begin() + 1;
-
-    second.assign(it, first.end() - 1); // the 5 central values of first
-
+    for (size_t i = 0; i < list_of_cities.size(); i++)
+        std::cout << list_of_cities.at(i) << " " << std::endl;
     
-
-    std::cout << "Size of first: " << int(first.size()) << '\n';
-    std::cout << "Size of second: " << int(second.size()) << '\n';
-
 
     std::cout << "------------- MAIN -------------" << std::endl;
     return (0);
