@@ -1,11 +1,12 @@
 // Copyright 2022 Taha Khabouss
 #include <iostream>
+#include <vector>
 #include "../src/vector/vector.hpp"
 
 int main() {
     std::cout << "------------- MAIN -------------" << std::endl;
 
-    ft::vector<std::string> list_of_cities;
+    std::vector<std::string> list_of_cities;
 
     list_of_cities.push_back("Tokyo");
     list_of_cities.push_back("IDK");

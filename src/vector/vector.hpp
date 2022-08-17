@@ -162,6 +162,24 @@ class vector {
     }
 
     iterator insert(iterator position, const value_type& val) {
+      // adjusting capacity
+      int diff = position.getPointer() - _begin;
+      if (diff < 0)
+      {
+         std::cout << "Error in insert" << std::endl; // throw exception or ...
+      }
+      if (diff < _size)
+      {
+         
+      }
+      if (diff >= _size && diff < _capacity)
+      {
+
+      }
+      if (diff >= _capacity)
+      {
+
+      }
       //  before this we need to left shift all elements after position
       _alloc.construct(position.getPointer(), val);
       return iterator(this->_pointer);
