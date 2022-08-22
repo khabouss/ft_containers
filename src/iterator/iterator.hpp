@@ -59,6 +59,23 @@ struct forward_iterator_tag{};
 struct output_iterator_tag {};
 struct input_iterator_tag {};
 
+template <typename T>
+typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type
+operator-(const ft::iterator<ft::random_access_iterator_tag, T> lhs,
+          const ft::iterator<ft::random_access_iterator_tag, T> rhs)
+{
+    return (lhs.getPointer() - rhs.getPointer());
+}
+
+/* For iterator - const_iterator */
+template <typename T_L, typename T_R>
+typename ft::iterator<ft::random_access_iterator_tag, T_L>::difference_type
+operator-(const ft::iterator<ft::random_access_iterator_tag, T_L> lhs,
+          const ft::iterator<ft::random_access_iterator_tag, T_R> rhs)
+{
+    return (lhs.getPointer() - rhs.getPointer());
+}
+
 }   // namespace ft
 
 #endif  // SRC_ITERATOR_ITERATOR_HPP_
