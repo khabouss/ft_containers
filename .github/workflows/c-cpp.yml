@@ -1,10 +1,10 @@
-name: Super-Linter
+name: Second
 
 on: push
 
 jobs:
   super-lint:
-    name: Lint code base
+    name: cppcheck
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
