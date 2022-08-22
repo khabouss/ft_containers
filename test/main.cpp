@@ -3,38 +3,38 @@
 #include <vector>
 #include "../src/vector/vector.hpp"
 
-#define ns ft
+#define ns std
+#define NOCONTENT false
 
 template <typename T>
-void printVectorInfo(T con)
+void printVectorInfo(T con, bool show = true)
 {
     std::cout << "-------------------" <<std::endl;
     std::cout << "size = " << con.size() << std::endl;
     std::cout << "capacity = " << con.capacity() << std::endl;
     std::cout << "content: " << std::endl;
-    for (size_t i = 0; i < con.size(); i++)
+    std::cout << "max_size = " << con.max_size() << std::endl;
+    for (size_t i = 0; i < con.size() && show; i++)
         std::cout << "  " << i << ". [" << con.at(i) << "]" << std::endl;
     std::cout << "-------------------" << std::endl;
 }
 
 int main() {
 
-    ns::vector<int> con;
+    std::vector<int> foo(3, 100); // three ints with a value of 100
+    std::vector<int> bar(5, 200); // five ints with a value of 200
 
-    con.push_back(1);
-    con.push_back(2);
-    con.push_back(3);
-    con.push_back(4);
-    con.push_back(5);
-    con.push_back(6);
-    con.push_back(7);
-    con.push_back(8);
-    con.push_back(9);
+    foo.swap(bar);
 
-    ns::vector<int>::iterator it = con.begin() + 2;
-    con.insert(it, 0);
+    std::cout << "foo contains:";
+    for (std::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-    printVectorInfo(con);
+    std::cout << "bar contains:";
+    for (std::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
     return (0);
 }

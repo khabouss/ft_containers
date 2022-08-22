@@ -54,6 +54,7 @@ namespace ft
             _alloc.construct(_pointer + i, val);
          _begin = iterator(_pointer);
          _end = iterator(_pointer + _size);
+         _max_size = _alloc.max_size();
       }
 
       template <class InputIterator>
@@ -66,6 +67,7 @@ namespace ft
             _alloc.construct(_pointer + i, *(first + i));
          _begin = iterator(_pointer);
          _end = iterator(_pointer + _size);
+         _max_size = _alloc.max_size();
       }
 
       vector(const vector &x)
@@ -96,7 +98,7 @@ namespace ft
          }
          if (_size == _capacity)
          {
-            _capacity *= 2;
+            _capacity++;
             _alloc.allocate(_capacity);
          }
          construct(value);
@@ -217,7 +219,6 @@ namespace ft
             _alloc.construct(_pointer + _size, *(first + i));
             _size++;
          }
-         std::cout << "Range Assign has been called" << std::endl;
       }
 
       void assign(size_type n, const value_type &val)
@@ -232,7 +233,6 @@ namespace ft
          _pointer = _alloc.allocate(_capacity);
          for (size_t i = 0; i < n; i++)
             construct(val);
-         std::cout << "Fill Assign has been called" << std::endl;
       }
 
       iterator insert(iterator position, const value_type &val)
@@ -244,7 +244,7 @@ namespace ft
 
          if (_size == _capacity)
          {
-            _capacity *= 2;
+            _capacity++;
             _alloc.allocate(_capacity);
          }
 
@@ -263,17 +263,88 @@ namespace ft
             ++_end;
             return position;
          }
-         // if (diff >= _size && diff < _capacity)
-         // {
-
-         // }
-         // if (diff >= _capacity)
-         // {
-
-         // }
          return iterator(this->_pointer);
       }
+
+      void insert(iterator position, size_type n, const value_type &val)
+      {
+         for (size_t i = 0; i < n; i++)
+            insert(position, val);
+      }
+
+      template <class InputIterator>
+      typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type // dont use is_same
+      insert(iterator position, InputIterator first, InputIterator last)
+      {
+         difference_type n = last - first - 1;
+         for (; n >= 0; n--)
+            insert(position, *(first + n));
+      }
+
+      iterator erase(iterator position)
+      {
+         // move all elements to new arr except for the one at position
+         _size--;
+         _capacity = _size;
+         pointer tmp = _alloc.allocate(_capacity);
+         size_t j = 0;
+         size_t changed;
+         for (size_t i = 0; i < _size; i++)
+         {
+            if (_pointer + i == position.getPointer())
+               changed = (j++);
+            _alloc.construct(tmp + i, *(_pointer + j));
+            j++;
+         }
+         // maybe free old memory
+         _alloc.deallocate(_pointer, _capacity + 1);
+         _pointer = tmp;
+         _begin = begin();
+         _end = end();
+         return iterator(tmp + changed);
+      }
+
+      iterator erase(iterator first, iterator last)
+      {
+         difference_type diff = last - first;
+         while (diff--)
+            first = erase(first);
+         return first;
+      }
+
+      void operator = (const vector &x)
+      {
+         this->_alloc = x._alloc;
+         this->_size = x._size;
+         this->_capacity = x._capacity;
+         this->_max_size = x._max_size;
+         this->_end = x._end;
+         this->_begin = x._begin;
+         this->_pointer = x._pointer;
+      }
+
+      void swap(vector &x)
+      {
+         vector c(*this);
+         *this = x;
+         x = c;
+      }
+
+      void clear()
+      {
+         if(_size != 0)
+            _alloc.deallocate(_pointer, _capacity);
+         _size = 0;
+         _capacity = 0;
+      }
+
+      allocator_type get_allocator() const
+      {
+         return _alloc;
+      }
    };
+
+   
 
 } // namespace ft
 
