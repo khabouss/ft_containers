@@ -13,14 +13,8 @@ namespace ft
    template <class T, class Alloc = std::allocator<T> >
    class vector
    {
-   private:
-      Alloc _alloc;
-      std::size_t _size;
-      std::size_t _capacity;
-      std::size_t _max_size;
-      iterator _end;
-      iterator _begin;
-      pointer _pointer;
+
+   public:
       typedef Alloc allocator_type;
       typedef ft::iterator<ft::random_access_iterator_tag, T> iterator;
       typedef typename Alloc::pointer pointer;
@@ -29,6 +23,15 @@ namespace ft
       typedef size_t size_type;
       typedef const value_type &const_reference;
       typedef ptrdiff_t difference_type;
+
+   private:
+      Alloc _alloc;
+      std::size_t _size;
+      std::size_t _capacity;
+      std::size_t _max_size;
+      iterator _end;
+      iterator _begin;
+      pointer _pointer;
 
       void construct(const T &value)
       {
@@ -43,11 +46,11 @@ namespace ft
          _max_size = _alloc.max_size();
       }
 
-      explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) 
-                  : _alloc(alloc), _size(n), _capacity(n), _end(NULL), _begin(NULL)
+      explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
+          : _alloc(alloc), _size(n), _capacity(n), _end(NULL), _begin(NULL)
       {
          _pointer = _alloc.allocate(n);
-         for (size_t i=0; i<_size; i++)
+         for (size_t i = 0; i < _size; i++)
             _alloc.construct(_pointer + i, val);
          _begin = iterator(_pointer);
          _end = iterator(_pointer + _size);
@@ -55,31 +58,29 @@ namespace ft
 
       template <class InputIterator>
       // dont use is_same
-      vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()
-      , typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type* = 0)
-               : _alloc(alloc), _size(last - first), _capacity(last - first), _end(NULL), _begin(NULL)
+      vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type * = 0)
+          : _alloc(alloc), _size(last - first), _capacity(last - first), _end(NULL), _begin(NULL)
       {
          _pointer = _alloc.allocate(last - first);
-         for (size_t i=0; i<_size; i++)
+         for (size_t i = 0; i < _size; i++)
             _alloc.construct(_pointer + i, *(first + i));
          _begin = iterator(_pointer);
          _end = iterator(_pointer + _size);
       }
 
-      vector (const vector& x)
+      vector(const vector &x)
       {
-         _alloc = ; 
-         _size = ; 
-         _capacity = ; 
-         _max_size = ; 
-         _end = ; 
-         _begin = ; 
-         _pointer = ; 
+         _alloc = x._alloc;
+         _size = x._size;
+         _capacity = x._capacity;
+         _max_size = x._max_size;
+         _end = x._end;
+         _begin = x._begin;
+         _pointer = x._pointer;
       }
 
       ~vector()
       {
-         std::cout << "Destructor is reached" << std::endl;
          // _alloc.deallocate(_pointer, _capacity);
          // _alloc.destroy(_pointer);
          // system(("leaks " + std::to_string(getpid())).c_str());

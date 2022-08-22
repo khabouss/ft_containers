@@ -29,6 +29,11 @@ class iterator {
         ++this->_ptr;
         return *this;
     }
+    iterator &operator++(int)
+    {
+        ++this->_ptr;
+        return *this;
+    }
     bool operator==(const iterator &rhs) const {
         return _ptr == rhs.getPointer();
     }
