@@ -3,7 +3,7 @@
 #include <vector>
 #include "../src/vector/vector.hpp"
 
-#define ns std
+#define ns ft
 
 #define NOCONTENT false
 template <typename T>
@@ -23,6 +23,11 @@ int main()
 {
     ns::vector<int> foo(3, 100); // three ints with a value of 100
     ns::vector<int> bar(2, 200); // two ints with a value of 200
+
+    std::cout << "size: " << foo.size() << std::endl;
+
+
+        std::cout << "at " << foo[10] << std::endl;
 
     if (foo==bar) std::cout << "foo and bar are equal\n";
     if (foo!=bar) std::cout << "foo and bar are not equal\n";

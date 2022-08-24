@@ -16,14 +16,18 @@ namespace ft
    {
 
    public:
-      typedef Alloc allocator_type;
-      typedef typename ft::random_access_iterator<T> iterator;
-      typedef typename Alloc::pointer pointer;
       typedef T value_type;
-      typedef value_type &reference;
-      typedef size_t size_type;
-      typedef const value_type &const_reference;
+      typedef Alloc allocator_type;
+      typedef typename allocator_type::reference reference;
+      typedef typename allocator_type::const_reference const_reference;
+      typedef typename Alloc::pointer pointer;
+      typedef typename Alloc::const_pointer const_pointer;
+      typedef typename ft::random_access_iterator<T> iterator;
+      typedef typename ft::random_access_iterator<const T> const_iterator;
+      typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+      typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
       typedef ptrdiff_t difference_type;
+      typedef size_t size_type;
 
    private:
       Alloc _alloc;
@@ -161,45 +165,63 @@ namespace ft
          }
          _size = n;
       }
-      iterator begin() const
+      iterator begin()
       {
          return iterator(this->_pointer);
       }
-      iterator end() const
+      const_iterator begin() const
+      {
+         return const_iterator(this->_pointer);
+      }
+      iterator end()
       {
          return iterator(this->_pointer + _size);
+      }
+      const_iterator end() const
+      {
+         return const_iterator(this->_pointer + _size);
       }
       size_type size() const
       {
          return this->_size;
       }
-      reference at(size_type n) const
+
+      reference at(size_type n)
+      {
+         if (n > size())
+            throw std::out_of_range("vector");
+         return (*(this->_pointer + n));
+      }
+      const_reference at(size_type n) const
+      {
+         if (n > size())
+            throw std::out_of_range("vector");
+         return (*(this->_pointer + n));
+      }
+
+      reference operator[](size_type n) const
       {
          return (*(this->_pointer + n));
       }
-      reference operator[](size_type n) const
-      {
-         return this->at(n);
-      }
       const_reference operator[](size_type n)
       {
-         return this->at(n);
+         return (*(this->_pointer + n));
       }
       reference front() const
       {
-         return this->at(0);
+         return (*(this->_pointer));
       }
       const_reference front()
       {
-         return this->at(0);
+         return (*(this->_pointer));
       }
       reference back() const
       {
-         return this->at(_size - 1);
+         return (*(this->_pointer + _size - 1));
       }
       const_reference back()
       {
-         return this->at(_size - 1);
+         return (*(this->_pointer + _size - 1));
       }
 
       template <class InputIterator>
@@ -343,6 +365,9 @@ namespace ft
       {
          return _alloc;
       }
+
+      reverse_iterator rbegin() { return reverse_iterator(_end); }
+      const_reverse_iterator rbegin() const { return reverse_iterator(_end); }
    };
 
    template <class T, class Alloc>
@@ -356,10 +381,10 @@ namespace ft
    template <class T, class Alloc>
    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
    {
-      typename vector<T, Alloc>::iterator first1 = lhs.begin();
-      typename vector<T, Alloc>::iterator last1 = lhs.end();
-      typename vector<T, Alloc>::iterator first2 = rhs.begin();
-      typename vector<T, Alloc>::iterator last2 = rhs.end();
+      typename vector<T, Alloc>::const_iterator first1 = lhs.begin();
+      typename vector<T, Alloc>::const_iterator last1 = lhs.end();
+      typename vector<T, Alloc>::const_iterator first2 = rhs.begin();
+      typename vector<T, Alloc>::const_iterator last2 = rhs.end();
 
       while (first1 != last1)
       {
@@ -374,21 +399,13 @@ namespace ft
    template <class T, class Alloc>
    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
    {
-      typename vector<T, Alloc>::iterator first1 = lhs.begin();
-      typename vector<T, Alloc>::iterator last1 = lhs.end();
-      typename vector<T, Alloc>::iterator first2 = rhs.begin();
-      typename vector<T, Alloc>::iterator last2 = rhs.end();
+      typename vector<T, Alloc>::const_iterator first1 = lhs.begin();
+      typename vector<T, Alloc>::const_iterator last1 = lhs.end();
+      typename vector<T, Alloc>::const_iterator first2 = rhs.begin();
+      typename vector<T, Alloc>::const_iterator last2 = rhs.end();
 
-      while (first1 != last1)
-      {
-         if (first2 == last2 || *first2 < *first1)
-            return false;
-         else if (*first1 < *first2)
-            return true;
-         ++first1;
-         ++first2;
-      }
-      return (first2 != last2);
+
+      return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));;
    }
 
    template <class T, class Alloc>
