@@ -3,13 +3,13 @@
 #include <vector>
 #include "../src/vector/vector.hpp"
 
-#define ns std
-#define NOCONTENT false
+#define ns ft
 
+#define NOCONTENT false
 template <typename T>
 void printVectorInfo(T con, bool show = true)
 {
-    std::cout << "-------------------" <<std::endl;
+    std::cout << "-------------------" << std::endl;
     std::cout << "size = " << con.size() << std::endl;
     std::cout << "capacity = " << con.capacity() << std::endl;
     std::cout << "content: " << std::endl;
@@ -19,22 +19,17 @@ void printVectorInfo(T con, bool show = true)
     std::cout << "-------------------" << std::endl;
 }
 
-int main() {
+int main()
+{
+    ns::vector<int> foo(3, 100); // three ints with a value of 100
+    ns::vector<int> bar(2, 200); // two ints with a value of 200
 
-    std::vector<int> foo(3, 100); // three ints with a value of 100
-    std::vector<int> bar(5, 200); // five ints with a value of 200
-
-    foo.swap(bar);
-
-    std::cout << "foo contains:";
-    for (std::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
-    std::cout << "bar contains:";
-    for (std::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
+    if (foo==bar) std::cout << "foo and bar are equal\n";
+    if (foo!=bar) std::cout << "foo and bar are not equal\n";
+    if (foo< bar) std::cout << "foo is less than bar\n";
+    if (foo> bar) std::cout << "foo is greater than bar\n";
+    if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
 
     return (0);
 }

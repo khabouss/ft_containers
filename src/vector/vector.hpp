@@ -160,43 +160,43 @@ namespace ft
          }
          _size = n;
       }
-      iterator begin()
+      iterator begin() const
       {
          return iterator(this->_pointer);
       }
-      iterator end()
+      iterator end() const
       {
          return iterator(this->_pointer + _size);
       }
-      size_type size()
+      size_type size() const
       {
          return this->_size;
       }
-      reference at(size_type n)
+      reference at(size_type n) const
       {
          return (*(this->_pointer + n));
       }
-      reference operator[](size_type n)
+      reference operator[](size_type n) const
       {
          return this->at(n);
       }
-      const_reference operator[](size_type n) const
+      const_reference operator[](size_type n)
       {
          return this->at(n);
       }
-      reference front()
+      reference front() const
       {
          return this->at(0);
       }
-      const_reference front() const
+      const_reference front()
       {
          return this->at(0);
       }
-      reference back()
+      reference back() const
       {
          return this->at(_size - 1);
       }
-      const_reference back() const
+      const_reference back()
       {
          return this->at(_size - 1);
       }
@@ -312,7 +312,7 @@ namespace ft
          return first;
       }
 
-      void operator = (const vector &x)
+      void operator=(const vector &x)
       {
          this->_alloc = x._alloc;
          this->_size = x._size;
@@ -332,7 +332,7 @@ namespace ft
 
       void clear()
       {
-         if(_size != 0)
+         if (_size != 0)
             _alloc.deallocate(_pointer, _capacity);
          _size = 0;
          _capacity = 0;
@@ -344,8 +344,63 @@ namespace ft
       }
    };
 
-   
+   template <class T, class Alloc>
+   void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
+   {
+      vector<T, Alloc> c(x);
+      x = y;
+      y = c;
+   }
 
+   template <class T, class Alloc>
+   bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+   {
+      typename vector<T, Alloc>::iterator first1 = lhs.begin();
+      typename vector<T, Alloc>::iterator last1 = lhs.end();
+      typename vector<T, Alloc>::iterator first2 = rhs.begin();
+      typename vector<T, Alloc>::iterator last2 = rhs.end();
+
+      while (first1 != last1)
+      {
+         if (!(*first1 == *first2))
+            return false;
+         ++first1;
+         ++first2;
+      }
+      return true;
+   }
+
+   template <class T, class Alloc>
+   bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+   {
+      typename vector<T, Alloc>::iterator first1 = lhs.begin();
+      typename vector<T, Alloc>::iterator last1 = lhs.end();
+      typename vector<T, Alloc>::iterator first2 = rhs.begin();
+      typename vector<T, Alloc>::iterator last2 = rhs.end();
+
+      while (first1 != last1)
+      {
+         if (first2 == last2 || *first2 < *first1)
+            return false;
+         else if (*first1 < *first2)
+            return true;
+         ++first1;
+         ++first2;
+      }
+      return (first2 != last2);
+   }
+
+   template <class T, class Alloc>
+   bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs < rhs); }
+
+   template <class T, class Alloc>
+   bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs < rhs) || lhs == rhs; }
+
+   template <class T, class Alloc>
+   bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs < rhs) || lhs == rhs; }
+
+   template <class T, class Alloc>
+   bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs == rhs); }
 } // namespace ft
 
 #endif // SRC_VECTOR_VECTOR_HPP_
