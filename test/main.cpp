@@ -3,7 +3,7 @@
 #include <vector>
 #include "../src/vector/vector.hpp"
 
-#define ns ft
+#define ns std
 
 #define NOCONTENT false
 template <typename T>

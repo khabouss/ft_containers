@@ -4,8 +4,9 @@
 
 #include <iostream>
 #include <memory>
-#include "../iterator/iterator.hpp"
+#include "../iterator/random_access_iterator.hpp"
 #include "../utils/utils.hpp"
+#include "../iterator/reverse_iterator.hpp"
 
 namespace ft
 {
@@ -16,7 +17,7 @@ namespace ft
 
    public:
       typedef Alloc allocator_type;
-      typedef ft::iterator<ft::random_access_iterator_tag, T> iterator;
+      typedef typename ft::random_access_iterator<T> iterator;
       typedef typename Alloc::pointer pointer;
       typedef T value_type;
       typedef value_type &reference;
