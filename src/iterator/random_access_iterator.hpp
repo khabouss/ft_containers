@@ -26,8 +26,8 @@ namespace ft
 
         pointer getPointer() const { return this->_ptr; }
 
-        random_access_iterator  &operator++() { ++this->_ptr; return *this; } // not working
-        random_access_iterator  &operator++(int) { ++this->_ptr; return *this; }
+        random_access_iterator  &operator++() { _ptr++; return *this; } // not working
+        random_access_iterator  &operator++(int) { random_access_iterator tmp(*this); _ptr++; return tmp; }
         bool                    operator==(const random_access_iterator &rhs) const { return _ptr == rhs.getPointer(); }
         bool                    operator!=(const random_access_iterator &rhs) const { return _ptr != rhs.getPointer(); }
         difference_type         operator-(const random_access_iterator &rhs) const { return _ptr - rhs.getPointer(); }
