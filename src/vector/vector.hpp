@@ -64,8 +64,8 @@ namespace ft
 
       template <class InputIterator>
       // dont use is_same
-      vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), 
-      typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type * = 0)
+      vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
+             typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type * = 0)
           : _alloc(alloc), _size(last - first), _capacity(last - first), _end(NULL), _begin(NULL)
       {
          _pointer = _alloc.allocate(last - first);
@@ -104,8 +104,8 @@ namespace ft
          }
          if (_size == _capacity)
          {
-            _capacity++;
-            _alloc.allocate(_capacity);
+            _capacity *= 2;
+            reserve(_capacity);
          }
          construct(value);
       }
@@ -137,17 +137,22 @@ namespace ft
       }
       void reserve(size_type n)
       {
-         if (n > _capacity)
+         if (n > this->max_size())
+            throw(std::length_error("vector::reserve"));
+         else if (n > this->capacity())
          {
-            Alloc temp;
-            pointer t = temp.allocate(n);
-            for (size_t i = 0; i < _size; i++)
-               temp.construct(t + i, *(_pointer + i));
-            if (_capacity != 0)
-               _alloc.deallocate(_pointer, _capacity);
-            _alloc = temp;
-            _pointer = t;
-            _capacity = n;
+            pointer prev_start = _pointer;
+            size_type prev_capacity = this->capacity();
+            _pointer = _alloc.allocate(n);
+            tt_end = _pointer;
+            while (prev_start != prev_end)
+            {
+               _alloc.construct(tt_end, *prev_start);
+               tt_end++;
+               prev_start++;
+            }
+            _end = iterator(tt_end);
+            _alloc.deallocate(prev_start - prev_size, prev_capacity);
          }
       }
       void resize(size_type n, value_type val = value_type())
@@ -199,14 +204,13 @@ namespace ft
             throw std::out_of_range("vector");
          return (*(this->_pointer + n));
       }
-
-      reference operator[](size_type n) const
+      reference operator[](size_type n)
       {
-         return (*(this->_pointer + n));
+         return (*(_pointer + n));
       }
-      const_reference operator[](size_type n)
+      const_reference operator[](size_type n) const
       {
-         return (*(this->_pointer + n));
+         return (*(_pointer + n));
       }
       reference front() const
       {
@@ -404,8 +408,8 @@ namespace ft
       typename vector<T, Alloc>::const_iterator first2 = rhs.begin();
       typename vector<T, Alloc>::const_iterator last2 = rhs.end();
 
-
-      return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));;
+      return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+      ;
    }
 
    template <class T, class Alloc>

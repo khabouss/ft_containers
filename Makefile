@@ -1,7 +1,7 @@
 NAME = tester
-FLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = test/main.cpp 
-CPP = c++
+FLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
+SRC = test/main2.cpp 
+CPP = c++ 
 M = upload
 
 OBJS	= $(SRC:.cpp=.o)
