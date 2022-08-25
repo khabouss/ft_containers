@@ -3,7 +3,7 @@
 #include <vector>
 #include "../src/vector/vector.hpp"
 
-#define ns ft
+using namespace ft;
 
 #define NOCONTENT false
 template <typename T>
@@ -19,22 +19,38 @@ void printVectorInfo(T con, bool show = true)
     std::cout << "-------------------" << std::endl;
 }
 
-int main()
+int main ()
 {
-    ns::vector<int> foo(3, 100); // three ints with a value of 100
-    ns::vector<int> bar(2, 200); // two ints with a value of 200
+  std::vector<int> v;
 
-    std::cout << "size: " << foo.size() << std::endl;
+  v.push_back(0);
+  v.push_back(1);
+  v.push_back(2);
+  v.push_back(3);
+  v.push_back(4);
+  v.push_back(5);
+  v.push_back(6);
+  v.push_back(7);
+  v.push_back(8);
+  v.push_back(9);
+  v.push_back(10);
+  v.push_back(11);
+  v.push_back(12);
+  v.push_back(13);
+
+  
+  std::vector<int>::iterator it = v.begin();
+    
+  std::cout << it[0] << std::endl; // 0
+  std::cout << *it << std::endl; // 0
+  it++;
+  std::cout << *it << std::endl; // 1
+  ++it;
+  std::cout << *it << std::endl; // 2
+  std::cout << (it == (it + 1)) << std::endl; // 0
+  std::cout << (it != (it + 1)) << std::endl; // 1
+  std::cout << it - (it++) << std::endl;
 
 
-        std::cout << "at " << foo[10] << std::endl;
-
-    if (foo==bar) std::cout << "foo and bar are equal\n";
-    if (foo!=bar) std::cout << "foo and bar are not equal\n";
-    if (foo< bar) std::cout << "foo is less than bar\n";
-    if (foo> bar) std::cout << "foo is greater than bar\n";
-    if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
-
-    return (0);
+  return 0;
 }

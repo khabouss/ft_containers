@@ -64,7 +64,8 @@ namespace ft
 
       template <class InputIterator>
       // dont use is_same
-      vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type * = 0)
+      vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), 
+      typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type * = 0)
           : _alloc(alloc), _size(last - first), _capacity(last - first), _end(NULL), _begin(NULL)
       {
          _pointer = _alloc.allocate(last - first);
@@ -225,8 +226,7 @@ namespace ft
       }
 
       template <class InputIterator>
-      typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type // dont use is_same
-      assign(InputIterator first, InputIterator last)
+      typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type assign(InputIterator first, InputIterator last)
       {
          if (_capacity != 0)
          {
@@ -296,7 +296,7 @@ namespace ft
       }
 
       template <class InputIterator>
-      typename ft::enable_if<ft::is_same<InputIterator, iterator>::value, void>::type // dont use is_same
+      typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
       insert(iterator position, InputIterator first, InputIterator last)
       {
          difference_type n = last - first - 1;
