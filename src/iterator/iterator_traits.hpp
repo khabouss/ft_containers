@@ -22,6 +22,7 @@ namespace ft
     template <class Iter>
     class iterator_traits
     {
+    public:
         typedef typename Iter::value_type value_type;
         typedef typename Iter::difference_type difference_type;
         typedef typename Iter::pointer pointer;
@@ -32,6 +33,7 @@ namespace ft
     template <class T>
     class iterator_traits<T *>
     {
+    public:
         typedef ptrdiff_t difference_type;
         typedef T value_type;
         typedef T *pointer;
@@ -42,6 +44,7 @@ namespace ft
     template <class T>
     class iterator_traits<const T *>
     {
+    public:
         typedef ptrdiff_t difference_type;
         typedef T value_type;
         typedef const T *pointer;

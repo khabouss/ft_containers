@@ -33,47 +33,34 @@ namespace ft
       Alloc _alloc;
       std::size_t _size;
       std::size_t _capacity;
-      std::size_t _max_size;
-      iterator _end;
-      iterator _begin;
       pointer _pointer;
 
       void construct(const T &value)
       {
          _alloc.construct(_pointer + _size, value);
          _size++;
-         _end = iterator(_pointer + _size);
       }
 
    public:
-      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _end(NULL), _begin(NULL)
-      {
-         _max_size = _alloc.max_size();
-      }
+      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0) {}
 
       explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
-          : _alloc(alloc), _size(n), _capacity(n), _end(NULL), _begin(NULL)
+          : _alloc(alloc), _size(n), _capacity(n)
       {
          _pointer = _alloc.allocate(n);
          for (size_t i = 0; i < _size; i++)
             _alloc.construct(_pointer + i, val);
-         _begin = iterator(_pointer);
-         _end = iterator(_pointer + _size);
-         _max_size = _alloc.max_size();
       }
 
       template <class InputIterator>
       // dont use is_same
       vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
              typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type * = 0)
-          : _alloc(alloc), _size(last - first), _capacity(last - first), _end(NULL), _begin(NULL)
+          : _alloc(alloc), _size(last - first), _capacity(last - first)
       {
          _pointer = _alloc.allocate(last - first);
          for (size_t i = 0; i < _size; i++)
             _alloc.construct(_pointer + i, *(first + i));
-         _begin = iterator(_pointer);
-         _end = iterator(_pointer + _size);
-         _max_size = _alloc.max_size();
       }
 
       vector(const vector &x)
@@ -81,9 +68,6 @@ namespace ft
          _alloc = x._alloc;
          _size = x._size;
          _capacity = x._capacity;
-         _max_size = x._max_size;
-         _end = x._end;
-         _begin = x._begin;
          _pointer = x._pointer;
       }
 
@@ -99,13 +83,10 @@ namespace ft
          {
             _capacity++;
             _pointer = _alloc.allocate(_capacity);
-            _begin = iterator(_pointer);
-            _end = iterator(_pointer + 1);
          }
          if (_size == _capacity)
          {
-            _capacity *= 2;
-            reserve(_capacity);
+            reserve(_capacity*2);
          }
          construct(value);
       }
@@ -125,7 +106,7 @@ namespace ft
       }
       size_type max_size() const
       {
-         return this->_max_size;
+         return this->_alloc.max_size();
       }
       size_type capacity() const
       {
@@ -139,20 +120,14 @@ namespace ft
       {
          if (n > this->max_size())
             throw(std::length_error("vector::reserve"));
-         else if (n > this->capacity())
+         else if (n > _capacity && _capacity > 0)
          {
-            pointer prev_start = _pointer;
-            size_type prev_capacity = this->capacity();
-            _pointer = _alloc.allocate(n);
-            tt_end = _pointer;
-            while (prev_start != prev_end)
-            {
-               _alloc.construct(tt_end, *prev_start);
-               tt_end++;
-               prev_start++;
-            }
-            _end = iterator(tt_end);
-            _alloc.deallocate(prev_start - prev_size, prev_capacity);
+            pointer tmp = _alloc.allocate(n);
+            for (size_type i = 0; i < _size; i++)
+               _alloc.construct(tmp + i, *(_pointer + i));
+            _alloc.deallocate(_pointer, _capacity);
+            _pointer = tmp;
+            _capacity = n;
          }
       }
       void resize(size_type n, value_type val = value_type())
@@ -212,19 +187,19 @@ namespace ft
       {
          return (*(_pointer + n));
       }
-      reference front() const
+      reference front()
       {
          return (*(this->_pointer));
       }
-      const_reference front()
+      const_reference front() const
       {
          return (*(this->_pointer));
       }
-      reference back() const
+      reference back() 
       {
          return (*(this->_pointer + _size - 1));
       }
-      const_reference back()
+      const_reference back() const
       {
          return (*(this->_pointer + _size - 1));
       }
@@ -264,10 +239,10 @@ namespace ft
 
       iterator insert(iterator position, const value_type &val)
       {
-         size_t diff = position - _begin;
+         size_t diff = position - iterator(_pointer); // c
 
-         if (diff < 0 || diff > _capacity)
-            std::cout << "Error in insert diff=" << diff << std::endl; // throw exception or ...
+         if (diff < 0)
+            std::cout << "double free or corruption (out)" << std::endl; // throw exception or ...
 
          if (_size == _capacity)
          {
@@ -277,7 +252,7 @@ namespace ft
 
          if (diff <= _size)
          {
-            pointer tmp = _end.getPointer();
+            pointer tmp = _pointer + _size;
             while (_size >= diff)
             {
                // std::cout << "value: " << *tmp << std::endl;
@@ -287,7 +262,6 @@ namespace ft
             }
             _alloc.construct(tmp + 1, val);
             _size++;
-            ++_end;
             return position;
          }
          return iterator(this->_pointer);
@@ -312,6 +286,7 @@ namespace ft
       {
          // move all elements to new arr except for the one at position
          _size--;
+         size_t old_capacity = _capacity;
          _capacity = _size;
          pointer tmp = _alloc.allocate(_capacity);
          size_t j = 0;
@@ -324,11 +299,9 @@ namespace ft
             j++;
          }
          // maybe free old memory
-         _alloc.deallocate(_pointer, _capacity + 1);
+         _alloc.deallocate(_pointer, old_capacity);
          _pointer = tmp;
-         _begin = begin();
-         _end = end();
-         return iterator(tmp + changed);
+         return iterator(_pointer + changed);
       }
 
       iterator erase(iterator first, iterator last)
@@ -338,25 +311,19 @@ namespace ft
             first = erase(first);
          return first;
       }
-
       void operator=(const vector &x)
       {
          this->_alloc = x._alloc;
          this->_size = x._size;
          this->_capacity = x._capacity;
-         this->_max_size = x._max_size;
-         this->_end = x._end;
-         this->_begin = x._begin;
          this->_pointer = x._pointer;
       }
-
       void swap(vector &x)
       {
          vector c(*this);
          *this = x;
          x = c;
       }
-
       void clear()
       {
          if (_size != 0)
@@ -369,9 +336,10 @@ namespace ft
       {
          return _alloc;
       }
-
-      reverse_iterator rbegin() { return reverse_iterator(_end); }
-      const_reverse_iterator rbegin() const { return reverse_iterator(_end); }
+      reverse_iterator rbegin() { return reverse_iterator(iterator(_pointer + _size)); }
+      const_reverse_iterator rbegin() const { return reverse_iterator(iterator(_pointer + _size)); }
+      reverse_iterator rend() { return reverse_iterator(iterator(_pointer)); }
+      const_reverse_iterator rend() const { return reverse_iterator(iterator(_pointer)); }
    };
 
    template <class T, class Alloc>

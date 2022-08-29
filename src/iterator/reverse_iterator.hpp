@@ -28,7 +28,7 @@ namespace ft
         iterator_type base() const { return current; }
 
         template <class U>
-        reverse_iterator &operator=(const reverse_iterator<U> &other);
+        reverse_iterator &operator=(const reverse_iterator<U> &other) { this->current = other.base(); return *this; }
 
         reference operator*() const { iterator_type tmp = current; return *--tmp; }
         pointer operator->() const { return &(operator*()); }
@@ -37,8 +37,8 @@ namespace ft
         reverse_iterator &operator--() { ++current; return *this; }
         reverse_iterator operator++(int) { reverse_iterator tmp = *this; --current; return tmp; }
         reverse_iterator operator--(int) { reverse_iterator tmp = *this; ++current; return tmp; }
-        reverse_iterator operator+(difference_type n) const { return reverse_iterator(current - n); }
-        reverse_iterator operator-(difference_type n) const { return reverse_iterator(current + n); }
+        reverse_iterator operator+(difference_type n) const { iterator_type tmp(current - n); return reverse_iterator(tmp); }
+        reverse_iterator operator-(difference_type n) const { iterator_type tmp(current + n); return reverse_iterator(tmp); }
         reverse_iterator &operator+=(difference_type n) { operator+(n); return *this; }
         reverse_iterator &operator-=(difference_type n) { operator-(n); return *this; }
 

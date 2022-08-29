@@ -9,7 +9,7 @@
 #else
 	#include <map>
 	#include <stack>
-	#include "../src/vector/vector.hpp"
+	#include <vector>
 #endif
 
 #include <stdlib.h>
@@ -55,10 +55,10 @@ int main(int argc, char** argv) {
 	const int seed = atoi(argv[1]);
 	srand(seed);
 
-	ft::vector<std::string> vector_str;
-	ft::vector<int> vector_int;
+	std::vector<std::string> vector_str;
+	std::vector<int> vector_int;
 	std::stack<int> stack_int;
-	ft::vector<Buffer> vector_buffer;
+	std::vector<Buffer> vector_buffer;
 	std::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
 	std::map<int, int> map_int;
 
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 		const int idx = rand() % COUNT;
 		vector_buffer[idx].idx = 5;
 	}
-	ft::vector<Buffer>().swap(vector_buffer);
+	std::vector<Buffer>().swap(vector_buffer);
 
 	try
 	{

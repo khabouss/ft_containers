@@ -15,9 +15,10 @@ int main()
 {
     ft::vector<int> vec;
 
-    for (int i = 0; i < 2; i++)
-        vec.push_back(i);
-    for (int i = 0; i < 2; i++)
+    vec.push_back(10);
+    vec.push_back(20);
+    
+    for (size_t i = 0; i < vec.size(); i++)
         std::cout << vec[i] << std::endl;
 
     return 0;
