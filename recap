@@ -1,1 +1,3 @@
-mess with resize() and push_back is not working
+ __is_input_iterator  <_InputIterator>::value
+ && !__is_forward_iterator<_InputIterator>::value
+ && is_constructible<value_type, typename iterator_traits<_InputIterator>::reference>::value

@@ -3,14 +3,59 @@
 #define SRC_ITERATOR_RANDOM_ACCESS_ITERATOR_HPP_
 
 #include <iostream>
-#include "iterator_traits.hpp"
+
 #include "iterator.hpp"
 
 namespace ft
 {
 
+    struct input_iterator_tag {};
+    ///  Marking output iterators.
+    struct output_iterator_tag {};
+    /// Forward iterators support a superset of input iterator operations.
+    struct forward_iterator_tag : public input_iterator_tag {};
+    /// Bidirectional iterators support a superset of forward iterator
+    /// operations.
+    struct bidirectional_iterator_tag : public forward_iterator_tag {};
+    /// Random-access iterators support a superset of bidirectional iterator
+    /// operations.
+    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+    
+    template <class Iter>
+    class iterator_traits
+    {
+    public:
+        typedef typename Iter::value_type value_type;
+        typedef typename Iter::difference_type difference_type;
+        typedef typename Iter::pointer pointer;
+        typedef typename Iter::reference reference;
+        typedef typename Iter::iterator_category iterator_category;
+    };
+
     template <class T>
-    class random_access_iterator : ft::iterator<ft::random_access_iterator_tag, T>
+    class iterator_traits<T *>
+    {
+    public:
+        typedef ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef T *pointer;
+        typedef T &reference;
+        typedef typename ft::random_access_iterator_tag iterator_category;
+    };
+
+    template <class T>
+    class iterator_traits<const T *>
+    {
+    public:
+        typedef ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef const T *pointer;
+        typedef const T &reference;
+        typedef typename ft::random_access_iterator_tag iterator_category;
+    };
+    
+    template <class T>
+    class random_access_iterator
     {
 
     public:
@@ -29,6 +74,7 @@ namespace ft
 
         pointer getPointer() const { return this->_ptr; };
 
+        random_access_iterator  operator=(const random_access_iterator & other) { this->_ptr = other.getPointer(); return *this; };
         random_access_iterator  operator++(void) { _ptr++; return *this; }
         random_access_iterator  operator--(void) { _ptr--; return *this; }
         random_access_iterator  operator++(int) { random_access_iterator previous(*this); _ptr++; return previous; }

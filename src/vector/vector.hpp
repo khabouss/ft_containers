@@ -34,6 +34,7 @@ namespace ft
       std::size_t _size;
       std::size_t _capacity;
       pointer _pointer;
+   
 
       void construct(const T &value)
       {

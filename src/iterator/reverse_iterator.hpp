@@ -1,10 +1,9 @@
 #if !defined(SRC_ITERATOR_REVERSE_ITERATOR_HPP_)
 #define SRC_ITERATOR_REVERSE_ITERATOR_HPP_
 
-#include "iterator_traits.hpp"
-
 namespace ft
 {
+    
 
     template <class Iterator>
     class reverse_iterator
@@ -12,11 +11,11 @@ namespace ft
 
     public:
         typedef Iterator iterator_type;
-        typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
-        typedef typename ft::iterator_traits<Iterator>::value_type value_type;
-        typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
-        typedef typename ft::iterator_traits<Iterator>::pointer pointer;
-        typedef typename ft::iterator_traits<Iterator>::reference reference;
+        typedef typename iterator_type::iterator_category iterator_category;
+        typedef typename iterator_type::value_type value_type;
+        typedef typename iterator_type::difference_type difference_type;
+        typedef typename iterator_type::pointer pointer;
+        typedef typename iterator_type::reference reference;
 
         reverse_iterator() : current() {}
         explicit reverse_iterator(iterator_type x) : current(x) {}
