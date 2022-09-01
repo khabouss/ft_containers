@@ -234,32 +234,24 @@ namespace ft
 
       iterator insert(iterator position, const value_type &val)
       {
-         size_t diff = position - iterator(_pointer); // c
-
-         if (diff < 0)
-            std::cout << "double free or corruption (out)" << std::endl; // throw exception or ...
-
-         if (_size == _capacity)
+         if (_capacity > _size)
          {
-            _capacity++;
-            _alloc.allocate(_capacity);
+            size_t diff = position - iterator(_pointer);
+            
          }
-
-         if (diff <= _size)
+         else
          {
-            pointer tmp = _pointer + _size;
-            while (_size >= diff)
-            {
-               // std::cout << "value: " << *tmp << std::endl;
-               _alloc.construct(tmp + 1, *(tmp));
-               tmp--;
-               diff++;
+            reserve(_capacity + 1);
+            size_t i = 0;
+            while (_pointer + _size - i > position.getPointer()){
+               _alloc.construct(_pointer + _size - i, *(_pointer + _size - i - 1));
+               // std::cout << *i << std::endl;
+               i++;
             }
-            _alloc.construct(tmp + 1, val);
+            _alloc.construct(_pointer + _size - i, val);
             _size++;
-            return position;
          }
-         return iterator(this->_pointer);
+         return position;
       }
 
       void insert(iterator position, size_type n, const value_type &val)
