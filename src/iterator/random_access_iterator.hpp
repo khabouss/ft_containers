@@ -5,66 +5,20 @@
 #include <iostream>
 
 #include "iterator.hpp"
+#define _ITERATOR ft::iterator<std::random_access_iterator_tag, T>
 
 namespace ft
 {
-
-    struct input_iterator_tag {};
-    ///  Marking output iterators.
-    struct output_iterator_tag {};
-    /// Forward iterators support a superset of input iterator operations.
-    struct forward_iterator_tag : public input_iterator_tag {};
-    /// Bidirectional iterators support a superset of forward iterator
-    /// operations.
-    struct bidirectional_iterator_tag : public forward_iterator_tag {};
-    /// Random-access iterators support a superset of bidirectional iterator
-    /// operations.
-    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-    
-    template <class Iter>
-    class iterator_traits
-    {
-    public:
-        typedef typename Iter::value_type value_type;
-        typedef typename Iter::difference_type difference_type;
-        typedef typename Iter::pointer pointer;
-        typedef typename Iter::reference reference;
-        typedef typename Iter::iterator_category iterator_category;
-    };
-
     template <class T>
-    class iterator_traits<T *>
-    {
-    public:
-        typedef ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef T *pointer;
-        typedef T &reference;
-        typedef typename ft::random_access_iterator_tag iterator_category;
-    };
-
-    template <class T>
-    class iterator_traits<const T *>
-    {
-    public:
-        typedef ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef const T *pointer;
-        typedef const T &reference;
-        typedef typename ft::random_access_iterator_tag iterator_category;
-    };
-    
-    template <class T>
-    class random_access_iterator
+    class random_access_iterator : _ITERATOR
     {
 
     public:
-        typedef iterator<ft::random_access_iterator_tag, T> iterator;
-        typedef typename iterator::value_type               value_type;
-        typedef typename iterator::difference_type          difference_type;
-        typedef typename iterator::pointer                  pointer;
-        typedef typename iterator::reference                reference;
-        typedef typename iterator::iterator_category        iterator_category;
+        typedef typename _ITERATOR::difference_type difference_type;
+        typedef typename _ITERATOR::value_type value_type;
+        typedef typename _ITERATOR::iterator_category iterator_category;
+        typedef T* pointer;
+        typedef T& reference;
 
         random_access_iterator(void) : _ptr(NULL) {};
         explicit random_access_iterator(pointer ptr) : _ptr(ptr) {};

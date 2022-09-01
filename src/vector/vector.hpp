@@ -94,15 +94,7 @@ namespace ft
 
       void pop_back()
       {
-         if (_capacity == 0)
-            return;
-         Alloc temp;
-         pointer t = temp.allocate(_capacity);
-         for (size_t i = 0; i < _size - 1; i++)
-            temp.construct(t + i, *(_pointer + i));
-         _alloc.deallocate(_pointer, _capacity);
-         _alloc = temp;
-         _pointer = t;
+         _alloc.destroy(&this->back());
          _size--;
       }
       size_type max_size() const
@@ -121,12 +113,14 @@ namespace ft
       {
          if (n > this->max_size())
             throw(std::length_error("vector::reserve"));
-         else if (n > _capacity && _capacity > 0)
+         else if (n > _capacity)
          {
             pointer tmp = _alloc.allocate(n);
-            for (size_type i = 0; i < _size; i++)
-               _alloc.construct(tmp + i, *(_pointer + i));
-            _alloc.deallocate(_pointer, _capacity);
+            if (_capacity > 0){
+               for (size_type i = 0; i < _size; i++)
+                  _alloc.construct(tmp + i, *(_pointer + i));
+               _alloc.deallocate(_pointer, _capacity);
+            }
             _pointer = tmp;
             _capacity = n;
          }

@@ -1,6 +1,6 @@
 NAME = tester
-FLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
-SRC = test/main.cpp 
+FLAGS = -Wall -Wextra -Werror -std=c++98 
+SRC = test/main2.cpp 
 CPP = c++ 
 M = upload
 
