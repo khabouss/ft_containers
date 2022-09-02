@@ -43,7 +43,7 @@ namespace ft
       }
 
    public:
-      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0) {}
+      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0) { _pointer = _alloc.allocate(0); }
 
       explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
           : _alloc(alloc), _size(n), _capacity(n)
@@ -74,6 +74,7 @@ namespace ft
 
       ~vector()
       {
+         // clear();
          // _alloc.deallocate(_pointer, _capacity);
          // _alloc.destroy(_pointer);
          // system(("leaks " + std::to_string(getpid())).c_str());
@@ -116,6 +117,7 @@ namespace ft
          else if (n > _capacity)
          {
             pointer tmp = _alloc.allocate(n);
+         
             if (_capacity > 0){
                for (size_type i = 0; i < _size; i++)
                   _alloc.construct(tmp + i, *(_pointer + i));
@@ -232,32 +234,57 @@ namespace ft
             construct(val);
       }
 
+      iterator __insert_(iterator position, const value_type &val, size_t fix)
+      {
+         size_t diff = (ft::distance(begin(), position));
+         if (_capacity == _size && _capacity != 0)
+            reserve(fix);
+         else if (_capacity == 0)
+         {
+            push_back(val);
+            return iterator(_pointer);
+         }
+         pointer tmp = _pointer + _size;
+         while (_size >= diff)
+         {
+            _alloc.construct(tmp + 1, *(tmp));
+            tmp--;
+            diff++;
+         }
+         _alloc.construct(tmp + 1, val);
+         _size++;
+         return iterator(tmp + 1);
+      }
+
       iterator insert(iterator position, const value_type &val)
       {
-         if (_capacity > _size)
+         size_t diff = (ft::distance(begin(), position));
+         if (_capacity == _size && _capacity != 0)
+            reserve(_capacity * 2);
+         else if (_capacity == 0)
          {
-            size_t diff = position - iterator(_pointer);
-            
+            push_back(val);
+            return iterator(_pointer);
          }
-         else
+         pointer tmp = _pointer + _size;
+         while (_size >= diff)
          {
-            reserve(_capacity + 1);
-            size_t i = 0;
-            while (_pointer + _size - i > position.getPointer()){
-               _alloc.construct(_pointer + _size - i, *(_pointer + _size - i - 1));
-               // std::cout << *i << std::endl;
-               i++;
-            }
-            _alloc.construct(_pointer + _size - i, val);
-            _size++;
+            _alloc.construct(tmp + 1, *(tmp));
+            tmp--;
+            diff++;
          }
-         return position;
+         _alloc.construct(tmp + 1, val);
+         _size++;
+         return iterator(tmp + 1);
       }
 
       void insert(iterator position, size_type n, const value_type &val)
       {
+         size_t init_capacity = _capacity;
          for (size_t i = 0; i < n; i++)
-            insert(position, val);
+         {
+            position = __insert_(position, val, (n <= init_capacity) ? init_capacity * 2 : init_capacity + n);
+         }
       }
 
       template <class InputIterator>
@@ -265,8 +292,9 @@ namespace ft
       insert(iterator position, InputIterator first, InputIterator last)
       {
          difference_type n = last - first - 1;
+         size_t init_capacity = _capacity;
          for (; n >= 0; n--)
-            insert(position, *(first + n));
+            position = __insert_(position, *(first + n), init_capacity * 2);
       }
 
       iterator erase(iterator position)
@@ -313,10 +341,8 @@ namespace ft
       }
       void clear()
       {
-         if (_size != 0)
-            _alloc.deallocate(_pointer, _capacity);
-         _size = 0;
-         _capacity = 0;
+         for(size_t i=0; i<_size; i++)
+            pop_back();
       }
 
       allocator_type get_allocator() const

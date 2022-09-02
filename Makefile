@@ -1,5 +1,5 @@
 NAME = tester
-FLAGS = -Wall -Wextra -Werror -std=c++98 
+FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 SRC = test/main2.cpp 
 CPP = c++ 
 M = upload
