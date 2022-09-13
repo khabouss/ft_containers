@@ -1,0 +1,25 @@
+==93834== Memcheck, a memory error detector
+==93834== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==93834== Using Valgrind-3.19.0.GIT-lbmacos and LibVEX; rerun with -h for copyright info
+==93834== Command: ./vector.out
+==93834== Parent PID: 8331
+==93834== 
+==93834== 
+==93834== HEAP SUMMARY:
+==93834==     in use at exit: 24,081 bytes in 171 blocks
+==93834==   total heap usage: 818 allocs, 647 frees, 73,551,878 bytes allocated
+==93834== 
+==93834== LEAK SUMMARY:
+==93834==    definitely lost: 0 bytes in 0 blocks
+==93834==    indirectly lost: 0 bytes in 0 blocks
+==93834==      possibly lost: 8,848 bytes in 7 blocks
+==93834==    still reachable: 15,233 bytes in 164 blocks
+==93834==         suppressed: 0 bytes in 0 blocks
+==93834== Rerun with --leak-check=full to see details of leaked memory
+==93834== 
+==93834== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 398 from 7)
+--93834-- 
+--93834-- used_suppression:      1 OSX1014:dyld-3 /goinfre/tkhabous/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/default.supp:742
+--93834-- used_suppression:    397 OSX1014:dyld-1 /goinfre/tkhabous/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/default.supp:726
+==93834== 
+==93834== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 398 from 7)

@@ -45,7 +45,7 @@ namespace ft
       pointer _pointer;
 
    public:
-      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _pointer(NULL) { _pointer = _alloc.allocate(0); }
+      explicit vector(const allocator_type &alloc = std::allocator<T>()) : _alloc(alloc), _size(0), _capacity(0), _pointer(NULL) {}
 
       explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
           : _alloc(alloc), _size(n), _capacity(n), _pointer(NULL)
