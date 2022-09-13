@@ -2446,5 +2446,7 @@ int main(void)
     reverse_iterator_tests();
     reverse_iterator_with_ft_vector();
     vector_tests();
+    std::string com = "leaks " + std::to_string( getpid() ) + " | grep leaked";
+    system(com.c_str());
     return 0;
 }
