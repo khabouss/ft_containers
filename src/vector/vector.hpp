@@ -77,7 +77,7 @@ namespace ft
       ~vector()
       {
          this->clear();
-         _alloc.deallocate(_pointer, _capacity);
+         _alloc.deallocate(_pointer,_capacity);
       }
       
       void push_back(const T &value)
