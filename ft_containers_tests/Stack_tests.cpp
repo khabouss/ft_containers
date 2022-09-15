@@ -11,9 +11,9 @@
 /* ************************************************************************************************ */
 
 // you should include your path to this files
-#include "../stack/Stack.hpp"       // your stack path.
-#include "../vector/Vector.hpp" // your Vector path.
-#include "../utility/pair.hpp"  // path to ft::pair.
+#include "../src/stack/stack.hpp"    // your stack path.
+#include "../src/vector/vector.hpp" // your Vector path.
+#include "../src/pair/pair.hpp"  // path to ft::pair.
 
 #include <vector>
 #include <stack>
@@ -23,6 +23,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/time.h>
+
+#define Stack stack
 
 #define BLUE "\e[0;34m"
 #define RED "\e[0;31m"
