@@ -13,4 +13,5 @@ This is a "42 school" project.
 read "[en.subject.pdf](https://github.com/khabouss/ft_containers/blob/main/en.subject.pdf)" to see the full assignment.
 
 BST scheme
+
 <img src="https://github.com/khabouss/ft_containers/blob/main/bst_node.png" width=50% height=50%>
