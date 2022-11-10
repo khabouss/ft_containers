@@ -54,31 +54,40 @@ namespace ft
 
         Node *rightRotate(Node *y)
         {
+            Node *p = y->parent;
             Node *x = y->left;
-            Node *T2 = x->right;
+            Node *tmp = x->right;
+            
             x->right = y;
-            y->left = T2;
-            y->height = max(height(y->left),
-                            height(y->right)) +
-                        1;
-            x->height = max(height(x->left),
-                            height(x->right)) +
-                        1;
+            y->left = tmp;
+
+            x->parent = p;
+            y->parent = x;
+            if (y->left)
+                y->left->parent = y;
+
+            y->height = max(height(y->left), height(y->right)) + 1;
+            x->height = max(height(x->left), height(x->right)) + 1;
             return x;
         }
 
         Node *leftRotate(Node *x)
         {
+            Node *p = x->parent;
             Node *y = x->right;
-            Node *T2 = y->left;
+            Node *t = y->left;
+  
             y->left = x;
-            x->right = T2;
-            x->height = max(height(x->left),
-                            height(x->right)) +
-                        1;
-            y->height = max(height(y->left),
-                            height(y->right)) +
-                        1;
+            x->right = t;
+
+            y->parent = p;
+            x->parent = y;
+            if (x->right)
+                x->right->parent = x;
+        
+            x->height = max(height(x->left), height(x->right)) + 1;
+            y->height = max(height(y->left), height(y->right)) + 1;
+
             return y;
         }
 
@@ -111,9 +120,9 @@ namespace ft
             if (node == NULL)
                 return (newNode(key, p, parent));
             if (key.first < node->key.first)
-                node->left = insert(node->left, key, p, node->left);
+                node->left = insert(node->left, key, p, node);
             else if (key.first > node->key.first)
-                node->right = insert(node->right, key, p, node->right);
+                node->right = insert(node->right, key, p, node);
             else
                 return node;
 
@@ -134,15 +143,8 @@ namespace ft
             }
             if (balanceFactor < -1)
             {
-                if (key.first > node->right->key.first)
-                {
-                    return leftRotate(node);
-                }
-                else if (key.first < node->right->key.first)
-                {
-                    node->right = rightRotate(node->right);
-                    return leftRotate(node);
-                }
+                if (key.first > node->right->key.first) { return leftRotate(node); }
+                else if (key.first < node->right->key.first) { node->right = rightRotate(node->right); return leftRotate(node); }
             }
             return node;
         }
@@ -152,7 +154,9 @@ namespace ft
             Node *exist;
             if ((exist = find(key.first)) != NULL)
                 return (ft::make_pair<ft::TreeIterator<Node, T>, bool>(ft::TreeIterator<Node, T>(exist), false));
-            return (ft::make_pair<ft::TreeIterator<Node, T>, bool>(ft::TreeIterator<Node, T>(root = insert(root, key, -1, root)), true));
+            root = insert(root, key, -1, root);
+            exist = find(key.first);
+            return (ft::make_pair<ft::TreeIterator<Node, T>, bool>(ft::TreeIterator<Node, T>(exist), true)); // <-- something is wrong with $parent
         }
 
         Node *nodeWithMimumValue(Node *node)
@@ -174,8 +178,7 @@ namespace ft
                 root->right = deleteNode(root->right, key);
             else
             {
-                if ((root->left == NULL) ||
-                    (root->right == NULL))
+                if ((root->left == NULL) || (root->right == NULL))
                 {
                     Node *temp = root->left ? root->left : root->right;
                     if (temp == NULL)
@@ -183,14 +186,18 @@ namespace ft
                         temp = root;
                         root = NULL;
                     }
-                    else
+                    else{
+                        Node *parent = root->parent;
                         *root = *temp;
+                        root->parent = parent;
+                    }
                     delete temp;
                 }
                 else
                 {
                     Node *temp = nodeWithMimumValue(root->right);
                     root->key = temp->key;
+                    root->parent = temp->parent;
                     root->right = deleteNode(root->right,
                                              temp->key);
                 }
@@ -265,7 +272,10 @@ namespace ft
                     std::cout << "L----";
                     indent += "|  ";
                 }
-                std::cout << root->key.second << std::endl;
+                if (root->parent)
+                    std::cout << "[" << root->key.first << "," << root->key.second << ", parent=" << root->parent->key.first << "]" << std::endl;
+                else
+                    std::cout << "[" << root->key.first << "," << root->key.second << "]" << std::endl;
                 printTree(root->left, indent, false);
                 printTree(root->right, indent, true);
             }

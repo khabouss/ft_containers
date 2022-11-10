@@ -5,18 +5,18 @@
 #include <iostream>
 
 #include "iterator.hpp"
-#define _ITERATOR ft::iterator<std::random_access_iterator_tag, T>
+#define _ITERATOR_RAND ft::iterator<std::random_access_iterator_tag, T>
 
 namespace ft
 {
     template <class T>
-    class random_access_iterator : _ITERATOR
+    class random_access_iterator : _ITERATOR_RAND
     {
 
     public:
-        typedef typename _ITERATOR::difference_type difference_type;
-        typedef typename _ITERATOR::value_type value_type;
-        typedef typename _ITERATOR::iterator_category iterator_category;
+        typedef typename _ITERATOR_RAND::difference_type difference_type;
+        typedef typename _ITERATOR_RAND::value_type value_type;
+        typedef typename _ITERATOR_RAND::iterator_category iterator_category;
         typedef T* pointer;
         typedef T& reference;
 
