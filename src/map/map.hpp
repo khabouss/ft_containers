@@ -2,7 +2,7 @@
 #define _SRC_MAP_MAP_HPP__
 
 #include <iostream>
-#include "includes/containers.hpp"
+#include "../utils/headers.hpp"
 #include "../iterator/mapIterator.hpp"
 #include "redBlack.hpp"
 
@@ -14,29 +14,16 @@ namespace ft
     {
 
     public:
-        typedef struct s_node
-        {
-            ft::pair<const Key, T> data;
-            bool color;
-            struct s_node *left;
-            struct s_node *right;
-            struct s_node *parent;
 
-            s_node(ft::pair<const Key, T> data) : data(data) {}
-
-            const Key &key(void) { return (data.first); }
-            
-            T &val(void) { return (data.second); }
-        } node;
-
-        class ValueCompare;
+        class value_compare;
+        class node;
 
         typedef Key key_type;
         typedef T mapped_type;
         typedef ft::pair<const key_type, mapped_type> value_type;
         typedef Compare key_compare;
-        typedef ValueCompare value_compare;
-        typedef typename Alloc::template rebind<node>::other allocator_type;
+        typedef value_compare value_compare;
+        typedef typename Alloc::template rebind<node>::other allocator_type; // << ??
         typedef typename allocator_type::reference reference;
         typedef typename allocator_type::const_reference const_reference;
         typedef typename allocator_type::pointer pointer;
@@ -48,12 +35,28 @@ namespace ft
         typedef typename mapIterator<node, Key, T>::difference_type difference_type;
         typedef typename mapIterator<node, Key, T>::size_type size_type;
 
+        class node
+        {
+
+        public:
+            class node *parent;
+            class node *left;
+            class node *right;
+            value_type data;
+            bool color;
+
+            node(value_type data) : data(data) {}
+
+            key_type const &getKey() { return (data.first); }
+            mapped_type &getValue() { return (data.second); }
+        };
+
         ft::redBlack<node> tree;
 
-        class ValueCompare
+        class value_compare
         {
         public:
-            friend class map;
+            friend class map; // justify
             typedef bool result_type;
             typedef value_type first_argument_type;
             typedef value_type second_argument_type;
@@ -63,131 +66,121 @@ namespace ft
             }
 
         protected:
-            ValueCompare(Compare c) : comp(c) {}
             Compare comp;
+            value_compare(Compare c) : comp(c) {}
         };
 
         explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
-        {
-            _alloc = alloc;
-            _comp = comp;
-            this->_new_nil_node();
-        }
+            : _alloc(alloc), _comp(comp) { initNilNode(); }
 
         template <class InputIterator>
         map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type(),
             typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type * = 0)
+            : _alloc(alloc), _comp(comp)
         {
-            _alloc = alloc;
-            _comp = comp;
-            this->_new_nil_node();
-
+            initNilNode();
             while (first != last)
-                this->insert(*first++);
+            {
+                insert(*first++);
+            }
         }
 
         map(const map &x)
         {
-            this->_new_nil_node();
+            initNilNode();
             *this = x;
         }
 
-        ~map(void)
+        ~map()
         {
-            this->clear();
-            _alloc.destroy(_nil);
-            _alloc.deallocate(_nil, 1);
+            clear();
+            _alloc.destroy(nil);
+            _alloc.deallocate(nil, 1);
         }
 
-        map &operator=(const map &x)
+        map &operator=(const map &other)
         {
-            if (this == &x)
+            if (this == &other)
                 return (*this);
-
-            this->clear();
-            _alloc = x._alloc;
-            _comp = x._comp;
-
-            for (const_iterator it = x.begin(); it != x.end(); it++)
-                this->insert(*it);
+            clear();
+            _alloc = other._alloc;
+            _comp = other._comp;
+            insert(other.begin(), other.end());
             return (*this);
         }
 
-        iterator begin(void)
+        iterator begin()
         {
-            return (iterator(this->_leftmost(_nil->right)));
+            return (iterator(leftMostNode(nil->right)));
         }
 
-        const_iterator begin(void) const
+        const_iterator begin() const
         {
-            return (const_iterator(this->_leftmost(_nil->right)));
+            return (const_iterator(leftMostNode(nil->right)));
         }
 
-        iterator end(void)
+        iterator end()
         {
-            return (iterator(_nil));
+            return (iterator(nil));
         }
 
-        const_iterator end(void) const
+        const_iterator end() const
         {
-            return (const_iterator(_nil));
+            return (const_iterator(nil));
         }
 
-        reverse_iterator rbegin(void)
+        reverse_iterator rbegin()
         {
-            return (reverse_iterator(_nil));
+            return (reverse_iterator(nil));
         }
 
-        const_reverse_iterator rbegin(void) const
+        const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(_nil));
+            return (const_reverse_iterator(nil));
         }
 
-        reverse_iterator rend(void)
+        reverse_iterator rend()
         {
-            return (reverse_iterator(this->_leftmost(_nil->right)));
+            return (reverse_iterator(leftMostNode(nil->right)));
         }
 
-        const_reverse_iterator rend(void) const
+        const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(this->_leftmost(_nil->right)));
+            return (const_reverse_iterator(leftMostNode(nil->right)));
         }
 
-        bool empty(void) const
+        bool empty() const
         {
-            return (_nil == _nil->right);
+            return (begin() == end());
         }
 
-        size_type size(void) const
+        size_type size() const
         {
-            size_type n = 0;
-            for (const_iterator it = this->begin(); it != this->end(); it++)
-                n++;
-            return (n);
+            return (ft::distance(begin(), end()));
         }
 
-        size_type max_size(void) const
+        size_type max_size() const
         {
             return (_alloc.max_size());
         }
 
         mapped_type &operator[](const key_type &k)
         {
-            this->insert(ft::make_pair(k, mapped_type()));
-            return (this->find(k)->second);
+            insert(ft::make_pair(k, mapped_type()));
+            return (find(k)->second);
         }
 
         ft::pair<iterator, bool> insert(const value_type &val)
         {
             iterator it;
-            if (this->count(val.first))
+            if (count(val.first))
             {
-                it = this->find(val.first);
+                it = find(val.first);
                 return (ft::make_pair(it, false));
             }
             else
             {
-                it = iterator(this->_new_node(val));
+                it = iterator(makeNode(val));
                 return (ft::make_pair(it, true));
             }
         }
@@ -195,7 +188,7 @@ namespace ft
         iterator insert(iterator position, const value_type &val)
         {
             (void)position;
-            return (this->insert(val).first);
+            return (insert(val).first);
         }
 
         template <class InputIterator>
@@ -203,39 +196,39 @@ namespace ft
                     typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type * = 0)
         {
             while (first != last)
-                this->insert(*first++);
+                insert(*first++);
         }
 
         void erase(iterator position)
         {
             node *ptr = position.getPtr();
 
-            if (ptr->left != _nil && ptr->right != _nil)
+            if (ptr->left != nil && ptr->right != nil)
             {
                 position--;
-                this->_swap_nodes(ptr, position.getPtr());
-                this->erase(ptr);
+                swapNode(ptr, position.getPtr());
+                erase(iterator(ptr)); // ptr->data.first
             }
             else
             {
-                node *child = (ptr->left != _nil) ? ptr->left : ptr->right;
+                node *child = (ptr->left != nil) ? ptr->left : ptr->right;
 
-                if (child != _nil)
+                if (child != nil)
                     child->parent = ptr->parent;
                 if (ptr->parent->left == ptr)
                     ptr->parent->left = child;
                 else
                     ptr->parent->right = child;
 
-                this->_removeNode(ptr, child);
+                removeNode(ptr, child);
             }
         }
 
         size_type erase(const key_type &k)
         {
-            if (this->count(k))
+            if (count(k))
             {
-                this->erase(this->find(k));
+                erase(find(k));
                 return (1);
             }
             return (0);
@@ -243,56 +236,59 @@ namespace ft
 
         void erase(iterator first, iterator last)
         {
-            for (iterator it = first++; it != last; it = first++)
-                this->erase(it);
+            iterator it = first++;
+
+            while (it != last)
+            {
+                erase(it);
+                it = first++;
+            }
         }
 
         void swap(map &x)
         {
             ft::swap(_alloc, x._alloc);
             ft::swap(_comp, x._comp);
-            ft::swap(_nil, x._nil);
+            ft::swap(nil, x.nil);
         }
 
-        void clear(void)
+        void clear()
         {
-            iterator first = this->begin();
-            for (iterator it = first++; it != this->end(); it = first++)
-                this->erase(it);
+            erase(begin(), end());
         }
 
-        key_compare key_comp(void) const
+        key_compare key_comp() const
         {
             return (key_compare());
         }
 
-        value_compare value_comp(void) const
+        value_compare value_comp() const
         {
             return (value_compare(_comp));
         }
 
         iterator find(const key_type &k)
         {
-            if (this->count(k))
-                return (iterator(this->_find_node(_nil->right, k)));
+            if (count(k))
+                return (iterator(findNode(nil->right, k)));
             else
-                return (this->end());
+                return (end());
         }
 
         const_iterator find(const key_type &k) const
         {
-            if (this->count(k))
-                return (const_iterator(this->_find_node(_nil->right, k)));
+            if (count(k))
+                return (const_iterator(findNode(nil->right, k)));
             else
-                return (this->end());
+                return (end());
         }
 
         size_type count(const key_type &k) const
         {
             size_type n = 0;
-            for (const_iterator it = this->begin(); it != this->end(); it++)
+            for (const_iterator it = begin(); it != end(); it++)
             {
-                if (this->_equal(k, it->first))
+                if (equal(k, it->first))
                     n++;
             }
             return (n);
@@ -300,11 +296,11 @@ namespace ft
 
         iterator lower_bound(const key_type &k)
         {
-            iterator it = this->begin();
+            iterator it = begin();
 
-            while (it != this->end())
+            while (it != end())
             {
-                if (_comp((*it).first, k) == false)
+                if (!_comp((*it).first, k))
                     break;
                 it++;
             }
@@ -313,11 +309,11 @@ namespace ft
 
         const_iterator lower_bound(const key_type &key) const
         {
-            const_iterator it = this->begin();
+            const_iterator it = begin();
 
-            while (it != this->end())
+            while (it != end())
             {
-                if (_comp((*it).first, key) == false)
+                if (!_comp((*it).first, key))
                     break;
                 it++;
             }
@@ -326,9 +322,9 @@ namespace ft
 
         iterator upper_bound(const key_type &k)
         {
-            iterator it = this->begin();
+            iterator it = begin();
 
-            while (it != this->end())
+            while (it != end())
             {
                 if (_comp(k, (*it).first))
                     break;
@@ -339,9 +335,9 @@ namespace ft
 
         const_iterator upper_bound(const key_type &key) const
         {
-            const_iterator it = this->begin();
+            const_iterator it = begin();
 
-            while (it != this->end())
+            while (it != end())
             {
                 if (_comp(key, (*it).first))
                     break;
@@ -352,60 +348,67 @@ namespace ft
 
         ft::pair<iterator, iterator> equal_range(const key_type &k)
         {
-            return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+            return (ft::make_pair(lower_bound(k), upper_bound(k)));
         }
 
         ft::pair<const_iterator, const_iterator> equal_range(const key_type &k) const
         {
-            return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+            return (ft::make_pair(lower_bound(k), upper_bound(k)));
         }
 
-        allocator_type get_allocator(void) const
+        allocator_type get_allocator() const
         {
             return (allocator_type());
         }
 
-        void _new_nil_node(void)
+        void initNilNode()
         {
-            _nil = _alloc.allocate(1);
-            this->_construct(_nil);
-            _nil->color = BLACK_;
+            nil = _alloc.allocate(1);
+            constructNode(nil);
+            nil->color = BLACK;
         }
 
-        node *_new_node(const value_type &val = value_type())
+        node *makeNode(const value_type &val = value_type())
         {
             node *new_node = _alloc.allocate(1);
-            this->_construct(new_node, val);
+            constructNode(new_node, val);
 
-            node *parent = this->_find_parent(_nil->right, val.first);
-            if (parent == _nil || !this->_comp(val.first, parent->key()))
+            node *parent = findParent(nil->right, val.first);
+            if (parent == nil || !_comp(val.first, parent->getKey()))
                 parent->right = new_node;
             else
                 parent->left = new_node;
             new_node->parent = parent;
 
-            this->tree._insertRB(new_node, _nil);
+            tree.insertNode(new_node, nil);
 
             return (new_node);
         }
 
-        void _construct(node *ptr, const value_type &val = value_type())
+        node * getRoot(node *any) {
+            node *parent = any->parent;
+            while (parent->parent != nil)
+                parent = parent->parent;
+            return parent;
+        }
+
+        void constructNode(node *ptr, const value_type &val = value_type())
         {
             node tmp = node(val);
-            tmp.left = _nil;
-            tmp.right = _nil;
-            tmp.parent = _nil;
-            tmp.color = RED_;
+            tmp.left = nil;
+            tmp.right = nil;
+            tmp.parent = nil;
+            tmp.color = RED;
             _alloc.construct(ptr, tmp);
         }
 
-        void _swap_nodes(node *a, node *b)
+        void swapNode(node *a, node *b)
         {
-            if (a->left != b && a->left != _nil)
+            if (a->left != b && a->left != nil)
                 a->left->parent = b;
-            if (a->right != b && a->right != _nil)
+            if (a->right != b && a->right != nil)
                 a->right->parent = b;
-            if (a->parent != b && a->parent != _nil)
+            if (a->parent != b && a->parent != nil)
             {
                 if (a->parent->left == a)
                     a->parent->left = b;
@@ -413,11 +416,11 @@ namespace ft
                     a->parent->right = b;
             }
 
-            if (b->left != a && b->left != _nil)
+            if (b->left != a && b->left != nil)
                 b->left->parent = a;
-            if (b->right != a && b->right != _nil)
+            if (b->right != a && b->right != nil)
                 b->right->parent = a;
-            if (b->parent != a && b->parent != _nil)
+            if (b->parent != a && b->parent != nil)
             {
                 if (b->parent->left == b)
                     b->parent->left = a;
@@ -443,64 +446,86 @@ namespace ft
             ft::swap(a->right, b->right);
             ft::swap(a->color, b->color);
 
-            if (_nil->right == a)
-                _nil->right = b;
-            else if (_nil->right == b)
-                _nil->right = a;
+            if (nil->right == a)
+                nil->right = b;
+            else if (nil->right == b)
+                nil->right = a;
         }
 
-        void _removeNode(node *ptr, node *child)
+        void removeNode(node *ptr, node *child)
         {
-            this->tree._deleteRB(ptr, child, _nil);
-
+            tree.deleteNode(ptr, child, nil);
             _alloc.destroy(ptr);
             _alloc.deallocate(ptr, 1);
         }
 
-        node *_find_node(node *current, const key_type &k) const
+        node *findNode(node *current, const key_type &k) const
         {
-            if (current == _nil || this->_equal(current->key(), k))
+            if (current == nil || equal(current->getKey(), k))
                 return (current);
-            else if (this->_comp(k, current->key()))
-                return (this->_find_node(current->left, k));
+            else if (_comp(k, current->getKey()))
+                return (findNode(current->left, k));
             else
-                return (this->_find_node(current->right, k));
+                return (findNode(current->right, k));
         }
 
-        node *_find_parent(node *current, const key_type &k) const
+        node *findParent(node *current, const key_type &k) const
         {
-            if (!this->_comp(k, current->key()))
+            if (!_comp(k, current->getKey()))
             {
-                if (current->right == _nil)
+                if (current->right == nil)
                     return (current);
                 else
-                    return (this->_find_parent(current->right, k));
+                    return (findParent(current->right, k));
             }
             else
             {
-                if (current->left == _nil)
+                if (current->left == nil)
                     return (current);
                 else
-                    return (this->_find_parent(current->left, k));
+                    return (findParent(current->left, k));
             }
         }
 
-        node *_leftmost(node *root) const
+        node *leftMostNode(node *root) const
         {
-            while (root->left != root->left->left)
+            while (root->left && root->left != root->left->left)
                 root = root->left;
             return (root);
         }
 
-        bool _equal(const key_type &lhs, const key_type &rhs) const
+        bool equal(const key_type &lhs, const key_type &rhs) const
         {
-            return (this->_comp(lhs, rhs) == false && this->_comp(rhs, lhs) == false);
+            return (_comp(lhs, rhs) == false && _comp(rhs, lhs) == false);
+        }
+
+        void printHelper(node* root, std::string indent, bool last)
+        {
+            if (root != nil)
+            {
+                std::cout << indent;
+                if (last)
+                {
+                    std::cout << "R----";
+                    indent += "   ";
+                }
+                else
+                {
+                    std::cout << "L----";
+                    indent += "|  ";
+                }
+
+                std::string sColor = root->color ? "R" : "B";
+                std::cout << root->data.first << "(" << sColor << ")" << std::endl;
+                printHelper(root->left, indent, false);
+                printHelper(root->right, indent, true);
+            }
         }
 
     private:
         allocator_type _alloc;
         key_compare _comp;
-        node *_nil;
+        node *nil;
     };
 
     template <class Key, class T, class Compare, class Alloc>

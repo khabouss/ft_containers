@@ -1,6 +1,6 @@
 #include "src/map/map.hpp"       // your Map path.
 #include "src/vector/vector.hpp" // your Vector path.
-#include "src/map/includes/utility.hpp"  // path to ft::pair.
+#include "src/utils/pair.hpp"  // path to ft::pair.
 // #include "map-test-helper.hpp"
 #include <map>
 
@@ -16,7 +16,7 @@
 #include <random>
 
 #define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
+#define _RED "\e[0;31m"
 #define GREEN "\e[0;32m"
 #define YELLOW "\e[1;33m"
 #define RESET "\e[0m"
@@ -77,31 +77,7 @@ int main() {
               << "] --------------------]\t\t\033[0m";
 
     {
-        bool cond(false);
-
-       /* ---------- Testing some edge cases ---------- */
-
-        std::map<int, std::string> m2;
-        ft::Map<int, std::string> ft_m2;
-
-        for (size_t i = 0; i < 101; i++)
-        {
-            m2.insert(std::make_pair(i, "string1"));
-            ft_m2.insert(ft::make_pair(i, "string1"));
-        }
-
-        std::map<int, std::string>::reverse_iterator it2 = m2.rbegin();
-        ft::Map<int, std::string>::reverse_iterator ft_it2 = ft_m2.rbegin();
-
-        m2.erase(m2.begin());
-        ft_m2.erase(ft_m2.begin());
-
-        cond = m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
-
-        m2.erase(it2->first);
-        ft_m2.erase(ft_it2->first);
-
-        cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
+        bool cond(true);
 
         std::map<int, std::string> m3;
         ft::Map<int, std::string> ft_m3;
@@ -117,8 +93,10 @@ int main() {
             ft_m3.insert(ft::make_pair(i, "string1"));
         }
 
+        ft_m3.printHelper(ft_m3.getRoot(ft_m3.find(10).getPtr()), "", true);
 
-        for (size_t i = 0; i < 101; ++i)
+
+        for (size_t i = 0; i < 11; ++i)
         {
             int n = distr(generator);
             int ret1 = m3.erase(n);

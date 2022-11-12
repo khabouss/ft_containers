@@ -1,8 +1,8 @@
-#if !defined(RED_BLACK_TREE)
-#define RED_BLACK_TREE
+#if !defined(REDBLACK_TREE)
+#define REDBLACK_TREE
 
 #include <iostream>
-#include "includes/containers.hpp"
+#include "../utils/headers.hpp"
 
 namespace ft
 {
@@ -14,100 +14,100 @@ namespace ft
     public:
         typedef Node node;
 
-        void _insertRB(node *x, node *_nil)
+        void insertNode(node *x, node *nil)
         {
             node *parent = x->parent;
             node *grandparent = parent->parent;
             node *uncle = (grandparent->right == parent) ? grandparent->left : grandparent->right;
 
-            if (parent == _nil)
-                x->color = BLACK_;
-            else if (parent->color == BLACK_)
+            if (parent == nil)
+                x->color = BLACK;
+            else if (parent->color == BLACK)
                 return;
-            else if (uncle->color == RED_)
+            else if (uncle->color == RED)
             {
-                parent->color = BLACK_;
-                uncle->color = BLACK_;
-                grandparent->color = RED_;
-                this->_insertRB(grandparent, _nil);
+                parent->color = BLACK;
+                uncle->color = BLACK;
+                grandparent->color = RED;
+                this->insertNode(grandparent, nil);
             }
-            else if (uncle->color == BLACK_)
+            else if (uncle->color == BLACK)
             {
                 if (grandparent->left->left == x || grandparent->right->right == x)
                 {
                     if (grandparent->left->left == x)
-                        this->_LL(grandparent, parent, _nil);
+                        this->leftLeft(grandparent, parent, nil);
                     else if (grandparent->right->right == x)
-                        this->_RR(grandparent, parent, _nil);
+                        this->rightRight(grandparent, parent, nil);
                     ft::swap(grandparent->color, parent->color);
                 }
                 else
                 {
                     if (grandparent->left->right == x)
-                        this->_LR(grandparent, parent, x, _nil);
+                        this->leftRight(grandparent, parent, x, nil);
                     else if (grandparent->right->left == x)
-                        this->_RL(grandparent, parent, x, _nil);
+                        this->rightLeft(grandparent, parent, x, nil);
                     ft::swap(grandparent->color, x->color);
                 }
             }
         }
 
-        void _deleteRB(node *v, node *u, node *_nil)
+        void deleteNode(node *v, node *u, node *nil)
         {
-            if (v->color == RED_ || u->color == RED_)
-                u->color = BLACK_;
+            if (v->color == RED || u->color == RED)
+                u->color = BLACK;
             else
-                this->_doubleBlack(u, v->parent, _nil);
+                this->doubleBlack(u, v->parent, nil);
         }
 
-        void _doubleBlack(node *u, node *parent, node *_nil)
+        void doubleBlack(node *u, node *parent, node *nil)
         {
             node *sibling = (parent->left != u) ? parent->left : parent->right;
 
-            if (u == _nil->right)
+            if (u == nil->right)
                 return;
-            else if (sibling->color == BLACK_ && (sibling->left->color == RED_ || sibling->right->color == RED_))
+            else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED))
             {
-                if (sibling == parent->left && sibling->left->color == RED_)
-                    this->_LL(parent, sibling, _nil);
-                else if (sibling == parent->left && sibling->right->color == RED_)
-                    this->_LR(parent, sibling, sibling->right, _nil);
-                else if (sibling == parent->right && sibling->right->color == RED_)
-                    this->_RR(parent, sibling, _nil);
-                else if (sibling == parent->right && sibling->left->color == RED_)
-                    this->_RL(parent, sibling, sibling->left, _nil);
+                if (sibling == parent->left && sibling->left->color == RED)
+                    this->leftLeft(parent, sibling, nil);
+                else if (sibling == parent->left && sibling->right->color == RED)
+                    this->leftRight(parent, sibling, sibling->right, nil);
+                else if (sibling == parent->right && sibling->right->color == RED)
+                    this->rightRight(parent, sibling, nil);
+                else if (sibling == parent->right && sibling->left->color == RED)
+                    this->rightLeft(parent, sibling, sibling->left, nil);
 
-                if (sibling->left->color == RED_)
-                    sibling->left->color = BLACK_;
+                if (sibling->left->color == RED)
+                    sibling->left->color = BLACK;
                 else
-                    sibling->right->color = BLACK_;
+                    sibling->right->color = BLACK;
             }
-            else if (sibling->color == BLACK_)
+            else if (sibling->color == BLACK)
             {
-                sibling->color = RED_;
-                if (parent->color == RED_)
-                    parent->color = BLACK_;
+                sibling->color = RED;
+                if (parent->color == RED)
+                    parent->color = BLACK;
                 else
-                    this->_doubleBlack(parent, parent->parent, _nil);
+                    this->doubleBlack(parent, parent->parent, nil);
             }
-            else if (sibling->color == RED_)
+            else if (sibling->color == RED)
             {
                 if (sibling == parent->left)
-                    this->_LL(parent, sibling, _nil);
+                    this->leftLeft(parent, sibling, nil);
                 else
-                    this->_RR(parent, sibling, _nil);
+                    this->rightRight(parent, sibling, nil);
                 ft::swap(parent->color, sibling->color);
-                this->_doubleBlack(u, parent, _nil);
+                this->doubleBlack(u, parent, nil);
             }
         }
 
-        void _LL(node *grandparent, node *parent, node *_nil)
+        void leftLeft(node *grandparent, node *parent, node *nil)
         {
             if (grandparent->parent->right == grandparent)
                 grandparent->parent->right = parent;
             else
                 grandparent->parent->left = parent;
-            if (parent->right != _nil)
+            if (parent->right != nil)
                 parent->right->parent = grandparent;
             grandparent->left = parent->right;
             parent->parent = grandparent->parent;
@@ -115,13 +115,13 @@ namespace ft
             parent->right = grandparent;
         }
 
-        void _RR(node *grandparent, node *parent, node *_nil)
+        void rightRight(node *grandparent, node *parent, node *nil)
         {
             if (grandparent->parent->right == grandparent)
                 grandparent->parent->right = parent;
             else
                 grandparent->parent->left = parent;
-            if (parent->left != _nil)
+            if (parent->left != nil)
                 parent->left->parent = grandparent;
             grandparent->right = parent->left;
             parent->parent = grandparent->parent;
@@ -129,15 +129,15 @@ namespace ft
             parent->left = grandparent;
         }
 
-        void _LR(node *grandparent, node *parent, node *x, node *_nil)
+        void leftRight(node *grandparent, node *parent, node *x, node *nil)
         {
             if (grandparent->parent->right == grandparent)
                 grandparent->parent->right = x;
             else
                 grandparent->parent->left = x;
-            if (x->left != _nil)
+            if (x->left != nil)
                 x->left->parent = parent;
-            if (x->right != _nil)
+            if (x->right != nil)
                 x->right->parent = grandparent;
             grandparent->left = x->right;
             parent->right = x->left;
@@ -148,15 +148,15 @@ namespace ft
             x->right = grandparent;
         }
 
-        void _RL(node *grandparent, node *parent, node *x, node *_nil)
+        void rightLeft(node *grandparent, node *parent, node *x, node *nil)
         {
             if (grandparent->parent->right == grandparent)
                 grandparent->parent->right = x;
             else
                 grandparent->parent->left = x;
-            if (x->left != _nil)
+            if (x->left != nil)
                 x->left->parent = grandparent;
-            if (x->right != _nil)
+            if (x->right != nil)
                 x->right->parent = parent;
             grandparent->right = x->left;
             parent->left = x->right;
@@ -170,4 +170,4 @@ namespace ft
 
 } // namespace ft
 
-#endif // RED_BLACK_TREE
+#endif // REDBLACKTREE

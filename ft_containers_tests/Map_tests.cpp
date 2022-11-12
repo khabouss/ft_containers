@@ -6,7 +6,7 @@
 
 #include "../src/map/map.hpp"       // your Map path.
 #include "../src/vector/vector.hpp" // your Vector path.
-#include "../src/map/includes/utility.hpp"  // path to ft::pair.
+#include "../src/utils/pair.hpp"  // path to ft::pair.
 // #include "map-test-helper.hpp"
 #include <map>
 
@@ -22,7 +22,7 @@
 #include <random>
 
 #define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
+#define _RED "\e[0;31m"
 #define GREEN "\e[0;32m"
 #define YELLOW "\e[1;33m"
 #define RESET "\e[0m"
@@ -2218,9 +2218,9 @@ void alarm_handler(int seg)
 int main()
 {
 
-    std::cout << RED << "________________________________________________________________________________________________________" << std::endl;
-    std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
-    std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
+    std::cout << _RED << "________________________________________________________________________________________________________" << std::endl;
+    std::cout << _RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
+    std::cout << _RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
 
     std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
