@@ -127,6 +127,7 @@ namespace ft
             parent->parent = grandparent->parent;
             grandparent->parent = parent;
             parent->left = grandparent;
+            parent->color = RED;
         }
 
         void leftRight(node *grandparent, node *parent, node *x, node *nil)

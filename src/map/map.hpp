@@ -515,7 +515,7 @@ namespace ft
                     indent += "|  ";
                 }
 
-                std::string sColor = root->color ? "R" : "B";
+                std::string sColor = root->color == 1 ? "R" : "B";
                 std::cout << root->data.first << "(" << sColor << ")" << std::endl;
                 printHelper(root->left, indent, false);
                 printHelper(root->right, indent, true);
