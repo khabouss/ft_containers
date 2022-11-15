@@ -31,7 +31,7 @@ int main() {
         int deletes[] = {0, 11, 20, 17, 11, 1, 6, 12, 1, 15, 5};
 
         std::cout << "before deleting" << std::endl;
-        ft_m.printHelper(ft_m.getRoot(ft_m.find(2).getPtr()), "", true);
+        ft_m.printHelper(ft_m.getRoot(), "", true);
 
         for (int i = 0; i < 11; i++)
         {
@@ -39,13 +39,13 @@ int main() {
             ft_m.erase(deletes[i]);
             // std::cout << "after deleting" << std::endl;
             // std::cout << " ---------------------------------- " << std::endl;
-            // ft_m.printHelper(ft_m.getRoot(ft_m.find(2).getPtr()), "", true);        
+            // ft_m.printHelper(ft_m.getRoot(), "", true);        
             // std::cout << " ---------------------------------- " << std::endl;
         }
             // exit (0);
 
         std::cout << "after deleting" << std::endl;
-        ft_m.printHelper(ft_m.getRoot(ft_m.find(2).getPtr()), "", true);
+        ft_m.printHelper(ft_m.getRoot(), "", true);
 
         m.erase(m.begin(), m.end());
         ft_m.erase(ft_m.begin(), ft_m.end());

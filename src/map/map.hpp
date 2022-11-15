@@ -51,7 +51,7 @@ namespace ft
             mapped_type &getValue() { return (data.second); }
         };
 
-        ft::redBlack<node> tree;
+        ft::redBlack<node, Compare> tree;
 
         class value_compare
         {
@@ -385,11 +385,8 @@ namespace ft
             return (new_node);
         }
 
-        node * getRoot(node *any) {
-            node *parent = any->parent;
-            while (parent->parent != nil)
-                parent = parent->parent;
-            return parent;
+        node * getRoot() {
+            return nil->right;
         }
 
         void constructNode(node *ptr, const value_type &val = value_type())
@@ -454,7 +451,8 @@ namespace ft
 
         void removeNode(node *ptr, node *child)
         {
-            tree.deleteNode(ptr, child, nil);
+            (void)child;
+            tree.deleteNode2(ptr, nil, _comp);
             _alloc.destroy(ptr);
             _alloc.deallocate(ptr, 1);
         }
