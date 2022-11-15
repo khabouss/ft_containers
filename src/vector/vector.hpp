@@ -325,19 +325,34 @@ namespace ft
 
       iterator erase(iterator position)
       {
-         for (size_type i = position - this->begin(); i < _size - 1; i++)
-            _pointer[i] = _pointer[i + 1];
-         _size--;
-         _alloc.destroy(_pointer + _size);
-         return (position);
+         size_type val = position - begin();
+
+         _size -= 1;
+         _alloc.destroy(&_pointer[val]);
+         for (size_type i = val; i < _size; i++)
+         {
+            _alloc.construct(&_pointer[i], _pointer[i + 1]);
+            _alloc.destroy(&_pointer[i + 1]);
+         }
+         return iterator(&_pointer[val]);
       }
 
       iterator erase(iterator first, iterator last)
       {
-         size_type n = last - first;
-         while (n-- > 0)
-            this->erase(first);
-         return (first);
+         size_type diff = last - first;
+
+         while (first != end() - diff)
+         {
+            *first = first[diff];
+            ++first;
+         }
+         while (first != end())
+         {
+            _alloc.destroy(&(*first));
+            ++first;
+         }
+         _size -= diff;
+         return last - diff;
       }
 
       vector &operator=(const vector &x)

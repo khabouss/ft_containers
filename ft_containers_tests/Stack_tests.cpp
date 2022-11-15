@@ -1,19 +1,9 @@
-/* ************************************************************************************************ */
-/*                                                                                                  */
-/*                                                        :::   ::::::::   ::::::::  :::::::::::    */
-/*   Stack_tests.cpp                                   :+:+:  :+:    :+: :+:    :+: :+:     :+:     */
-/*                                                      +:+         +:+        +:+        +:+       */
-/*   By: mamoussa <mamoussa@student.1337.ma>           +#+      +#++:      +#++:        +#+         */
-/*                                                    +#+         +#+        +#+      +#+           */
-/*   Created: 2021/10/12 12:45:02 by mamoussa        #+#  #+#    #+# #+#    #+#     #+#             */
-/*   Updated: 2021/10/12 12:45:02 by mamoussa     ####### ########   ########      ###.ma           */
-/*                                                                                                  */
-/* ************************************************************************************************ */
 
 // you should include your path to this files
-#include "../stack/Stack.hpp"       // your stack path.
-#include "../vector/Vector.hpp" // your Vector path.
-#include "../utility/pair.hpp"  // path to ft::pair.
+#include "../src/stack/stack.hpp"       // your stack path.
+#include "../src/vector/vector.hpp" // your Vector path.
+#include "../src/utils/pair.hpp"   // path to ft::pair.
+#define Stack stack
 
 #include <vector>
 #include <stack>
@@ -25,7 +15,7 @@
 #include <sys/time.h>
 
 #define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
+#define RRED "\e[0;31m"
 #define GREEN "\e[0;32m"
 #define YELLOW "\e[1;33m"
 #define RESET "\e[0m"
@@ -332,9 +322,9 @@ void alarm_handler(int seg)
 
 int main()
 {
-	std::cout << RED << "________________________________________________________________________________________________________" << std::endl;
-    std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
-    std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
+	std::cout << RRED << "________________________________________________________________________________________________________" << std::endl;
+    std::cout << RRED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
+    std::cout << RRED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
 
     std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
