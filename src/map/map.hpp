@@ -170,12 +170,21 @@ namespace ft
             return (find(k)->second);
         }
 
+        node *findNodeByValue(node *current, const value_type &k) const
+        {
+            if (current == nil || equal2(current->data, k))
+                return (current);
+            else if (_comp(k.first, current->data.first))
+                return (findNodeByValue(current->left, k));
+            else
+                return (findNodeByValue(current->right, k));
+        }
+
         ft::pair<iterator, bool> insert(const value_type &val)
         {
-            iterator it;
-            if (count(val.first))
+            iterator it = findNodeByValue(nil->right, val);
+            if (it != nil)
             {
-                it = find(val.first);
                 return (ft::make_pair(it, false));
             }
             else
@@ -226,9 +235,10 @@ namespace ft
 
         size_type erase(const key_type &k)
         {
-            if (count(k))
+            iterator it = findNode(nil->right, k);
+            if (it != nil)
             {
-                erase(find(k));
+                erase(it);
                 return (1);
             }
             return (0);
@@ -269,18 +279,12 @@ namespace ft
 
         iterator find(const key_type &k)
         {
-            if (count(k))
-                return (iterator(findNode(nil->right, k)));
-            else
-                return (end());
+            return (iterator(findNode(nil->right, k)));
         }
 
         const_iterator find(const key_type &k) const
         {
-            if (count(k))
-                return (const_iterator(findNode(nil->right, k)));
-            else
-                return (end());
+            return (const_iterator(findNode(nil->right, k)));
         }
 
         size_type count(const key_type &k) const
@@ -495,6 +499,11 @@ namespace ft
         bool equal(const key_type &lhs, const key_type &rhs) const
         {
             return (_comp(lhs, rhs) == false && _comp(rhs, lhs) == false);
+        }
+
+        bool equal2(const value_type &lhs, const value_type &rhs) const
+        {
+            return (_comp(lhs.first, rhs.first) == false && _comp(rhs.first, lhs.first) == false);
         }
 
         void printHelper(node* root, std::string indent, bool last)

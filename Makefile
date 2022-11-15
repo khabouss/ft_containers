@@ -1,5 +1,5 @@
 NAME = a.out
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 SRC = main.cpp 
 CPP = c++ 
 M = upload
