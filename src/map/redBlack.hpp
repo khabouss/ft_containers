@@ -11,9 +11,20 @@ namespace ft
     class redBlack
     {
 
+
+    private:
+    size_t _size;
+
     public:
         typedef Node node;
         typedef Compare comp;
+
+        redBlack() : _size(0) {}
+
+        size_t size() const { return _size; }
+        void incSize() { _size++; }
+        void decSize() { _size--; }
+        void setSize(size_t n) { this->_size = n; }
 
         void insertNode(node *x, node *nil)
         {
@@ -50,55 +61,6 @@ namespace ft
                         this->rightLeft(grandparent, parent, x, nil);
                     ft::swap(grandparent->color, x->color);
                 }
-            }
-        }
-
-        void deleteNode(node *v, node *u, node *nil)
-        {
-            if (v->color == RED || u->color == RED)
-                u->color = BLACK;
-            else
-                this->doubleBlack(u, v->parent, nil);
-        }
-
-        void doubleBlack(node *u, node *parent, node *nil)
-        {
-            node *sibling = (parent->left != u) ? parent->left : parent->right;
-
-            if (u == nil->right)
-                return;
-            else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED))
-            {
-                if (sibling == parent->left && sibling->left->color == RED)
-                    this->leftLeft(parent, sibling, nil);
-                else if (sibling == parent->left && sibling->right->color == RED)
-                    this->leftRight(parent, sibling, sibling->right, nil);
-                else if (sibling == parent->right && sibling->right->color == RED)
-                    this->rightRight(parent, sibling, nil);
-                else if (sibling == parent->right && sibling->left->color == RED)
-                    this->rightLeft(parent, sibling, sibling->left, nil);
-
-                if (sibling->left->color == RED)
-                    sibling->left->color = BLACK;
-                else
-                    sibling->right->color = BLACK;
-            }
-            else if (sibling->color == BLACK)
-            {
-                sibling->color = RED;
-                if (parent->color == RED)
-                    parent->color = BLACK;
-                else
-                    this->doubleBlack(parent, parent->parent, nil);
-            }
-            else if (sibling->color == RED)
-            {
-                if (sibling == parent->left)
-                    this->leftLeft(parent, sibling, nil);
-                else
-                    this->rightRight(parent, sibling, nil);
-                ft::swap(parent->color, sibling->color);
-                this->doubleBlack(u, parent, nil);
             }
         }
 
@@ -382,116 +344,7 @@ namespace ft
 
         void deleteNode2(node* tobeDeleted, node *nil, comp _comp) {
             deleteNodeHelper(nil->right, tobeDeleted, nil, _comp);
-        }
-
-        void insertFix(node* k, node* nil)
-        {
-            node* u;
-            while (k->parent->color == 1)
-            {
-                if (k->parent == k->parent->parent->right)
-                {
-                    u = k->parent->parent->left;
-                    if (u->color == 1)
-                    {
-                        u->color = 0;
-                        k->parent->color = 0;
-                        k->parent->parent->color = 1;
-                        k = k->parent->parent;
-                    }
-                    else
-                    {
-                        if (k == k->parent->left)
-                        {
-                            k = k->parent;
-                            rightRotate(k, nil);
-                        }
-                        k->parent->color = 0;
-                        k->parent->parent->color = 1;
-                        leftRotate(k->parent->parent, nil);
-                    }
-                }
-                else
-                {
-                    u = k->parent->parent->right;
-
-                    if (u->color == 1)
-                    {
-                        u->color = 0;
-                        k->parent->color = 0;
-                        k->parent->parent->color = 1;
-                        k = k->parent->parent;
-                    }
-                    else
-                    {
-                        if (k == k->parent->right)
-                        {
-                            k = k->parent;
-                            leftRotate(k, nil);
-                        }
-                        k->parent->color = 0;
-                        k->parent->parent->color = 1;
-                        rightRotate(k->parent->parent, nil);
-                    }
-                }
-                if (k == nil->right)
-                {
-                    break;
-                }
-            }
-            nil->right->color = 0;
-        }
-
-        typename ft::pair<node*, bool> insert(node* n, node *nil, Compare _comp)
-        {
-            node* y = nil;
-            node* x = nil->right;
-
-            while (x != nil)
-            {
-                y = x;
-                if (_comp(n->data.first, x->data.first) == false && _comp(x->data.first, n->data.first) == false)
-                {
-                    return ft::make_pair(x, false);
-                }
-                if (_comp(x->data.first, n->data.first))
-                {
-                    x = x->left;
-                }
-                else
-                {
-                    x = x->right;
-                }
-            }
-
-            n->parent = y;
-            if (y == nil)
-            {
-                nil->right = n;
-            }
-            else if (_comp(y->data.first, n->data.first))
-            {
-                y->left = n;
-            }
-            else
-            {
-                y->right = n;
-            }
-
-            if (n->parent == nil)
-            {
-                n->color = 0;
-                return ft::make_pair(n, true);
-            }
-
-            if (n->parent->parent == nil)
-            {
-                return ft::make_pair(n, true);
-            }
-
-            insertFix(n, nil);
-            return ft::make_pair(n, true);
-        }
+        }   
     };
 
 } // namespace ft

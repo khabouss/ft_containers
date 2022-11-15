@@ -4,11 +4,13 @@
 
 // you should include your path to this files
 
-#include "../map/Map.hpp"       // your Map path.
-#include "../vector/Vector.hpp" // your Vector path.
-#include "../utility/pair.hpp"  // path to ft::pair.
+#include "../src/map/map.hpp"       // your Map path.
+#include "../src/vector/vector.hpp" // your Vector path.
+#include "../src/utils/pair.hpp"  // path to ft::pair.
 // #include "map-test-helper.hpp"
 #include <map>
+#define Map map
+#define Vector vector
 
 #include <vector>
 #include <iostream>
@@ -22,7 +24,7 @@
 #include <random>
 
 #define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
+#define RRED "\e[0;31m"
 #define GREEN "\e[0;32m"
 #define YELLOW "\e[1;33m"
 #define RESET "\e[0m"
@@ -2056,7 +2058,7 @@ void testAllocatorMethodes()
     {
         int psize;
         ft::Map<char, int> mymap;
-        ft::pair<const char, int> *p;
+        ft::map<char, int>::node *p; // edited
 
         // allocate an array of 5 elements using mymap's allocator:
         p = mymap.get_allocator().allocate(5);
@@ -2215,9 +2217,9 @@ void alarm_handler(int seg)
 int main()
 {
 
-    std::cout << RED << "________________________________________________________________________________________________________" << std::endl;
-    std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
-    std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
+    std::cout << RRED << "________________________________________________________________________________________________________" << std::endl;
+    std::cout << RRED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
+    std::cout << RRED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
 
     std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;

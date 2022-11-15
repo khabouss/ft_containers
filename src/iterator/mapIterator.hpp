@@ -10,7 +10,7 @@
 namespace ft
 {
 	template <class node, class Key, class T>
-	class mapIterator : ft::iterator<std::bidirectional_iterator_tag, T>
+	class mapIterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 	{
 
 	public:

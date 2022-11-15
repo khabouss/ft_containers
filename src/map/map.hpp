@@ -8,7 +8,7 @@
 
 namespace ft
 {
-
+    // edited std
     template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
     class map
     {
@@ -71,12 +71,12 @@ namespace ft
         };
 
         explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
-            : _alloc(alloc), _comp(comp) { initNilNode(); }
+            : tree(), _alloc(alloc), _comp(comp) { initNilNode(); }
 
         template <class InputIterator>
         map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type(),
             typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type * = 0)
-            : _alloc(alloc), _comp(comp)
+            : tree(), _alloc(alloc), _comp(comp)
         {
             initNilNode();
             while (first != last)
@@ -156,7 +156,7 @@ namespace ft
 
         size_type size() const
         {
-            return (ft::distance(begin(), end()));
+            return (tree.size());
         }
 
         size_type max_size() const
@@ -260,6 +260,9 @@ namespace ft
             ft::swap(_alloc, x._alloc);
             ft::swap(_comp, x._comp);
             ft::swap(nil, x.nil);
+            size_t oldsize = x.tree.size();
+            x.tree.setSize(this->tree.size());
+            this->tree.setSize(oldsize);
         }
 
         void clear()
@@ -289,65 +292,64 @@ namespace ft
 
         size_type count(const key_type &k) const
         {
-            size_type n = 0;
-            for (const_iterator it = begin(); it != end(); it++)
-            {
-                if (equal(k, it->first))
-                    n++;
-            }
-            return (n);
+            node* s = findNode(nil->right, k);
+            return (s != nil);
         }
 
         iterator lower_bound(const key_type &k)
         {
-            iterator it = begin();
-
-            while (it != end())
+            node*	x = nil->right;
+            node*	lower = nil;
+        
+            while (x != nil)
             {
-                if (!_comp((*it).first, k))
-                    break;
-                it++;
+                if (!_comp(x->data.first, k))
+                    {       lower = x; x = x->left;        }
+                else         x = x->right;
             }
-            return (it);
+            return iterator(lower);
         }
 
-        const_iterator lower_bound(const key_type &key) const
+        const_iterator lower_bound(const key_type &k) const
         {
-            const_iterator it = begin();
-
-            while (it != end())
+            node*	x = nil->right;
+            node*	lower = nil;
+        
+            while (x != nil)
             {
-                if (!_comp((*it).first, key))
-                    break;
-                it++;
+                if (!_comp(x->data.first, k))
+                    {       lower = x; x = x->left;        }
+                else         x = x->right;
             }
-            return (it);
+            return const_iterator(lower);
         }
 
         iterator upper_bound(const key_type &k)
         {
-            iterator it = begin();
-
-            while (it != end())
+            node*	x = nil->right;
+            node*	upper = nil;
+        
+            while (x != nil)
             {
-                if (_comp(k, (*it).first))
-                    break;
-                it++;
+                if (_comp(k, x->data.first))
+                    {       upper = x; x = x->left;        }
+                else         x = x->right;
             }
-            return (it);
+            return iterator(upper);
         }
 
-        const_iterator upper_bound(const key_type &key) const
+        const_iterator upper_bound(const key_type &k) const
         {
-            const_iterator it = begin();
-
-            while (it != end())
+            node*	x = nil->right;
+            node*	upper = nil;
+        
+            while (x != nil)
             {
-                if (_comp(key, (*it).first))
-                    break;
-                it++;
+                if (_comp(k, x->data.first))
+                    {       upper = x; x = x->left;        }
+                else         x = x->right;
             }
-            return (it);
+            return const_iterator(upper);
         }
 
         ft::pair<iterator, iterator> equal_range(const key_type &k)
@@ -385,6 +387,7 @@ namespace ft
             new_node->parent = parent;
 
             tree.insertNode(new_node, nil);
+            tree.incSize();
 
             return (new_node);
         }
@@ -457,6 +460,7 @@ namespace ft
         {
             (void)child;
             tree.deleteNode2(ptr, nil, _comp);
+            tree.decSize();
             _alloc.destroy(ptr);
             _alloc.deallocate(ptr, 1);
         }
