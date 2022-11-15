@@ -15,7 +15,7 @@
 #include <sys/time.h>
 
 #define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
+#define RRED "\e[0;31m"
 #define GREEN "\e[0;32m"
 #define YELLOW "\e[1;33m"
 #define RESET "\e[0m"
@@ -322,9 +322,9 @@ void alarm_handler(int seg)
 
 int main()
 {
-	std::cout << RED << "________________________________________________________________________________________________________" << std::endl;
-    std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
-    std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
+	std::cout << RRED << "________________________________________________________________________________________________________" << std::endl;
+    std::cout << RRED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
+    std::cout << RRED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
 
     std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
