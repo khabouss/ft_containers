@@ -90,8 +90,6 @@ namespace ft
             parent->parent = grandparent->parent;
             grandparent->parent = parent;
             parent->left = grandparent;
-            // if (parent != nil->right) // <-- this case is more special than just that condition
-            //     parent->color = RED;
         }
 
         void leftRight(node *grandparent, node *parent, node *x, node *nil)
@@ -182,8 +180,7 @@ namespace ft
             x->parent = y;
         }
 
-        // For balancing the tree after deletion
-        void deleteFix(node* x, node* nil)
+        void balanceDeletion(node* x, node* nil)
         {
             node* s;
             while (x != nil->right && x->color == 0)
@@ -335,10 +332,10 @@ namespace ft
                 y->left->parent = y;
                 y->color = z->color;
             }
-            delete z; // could be a prob
+            delete z;
             if (y_original_color == 0)
             {
-                deleteFix(x, nil);
+                balanceDeletion(x, nil);
             }
         }
 

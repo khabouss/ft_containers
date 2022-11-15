@@ -80,24 +80,16 @@ namespace ft
 
 		template <class Y>
 		bool operator==(const map_reverse_iterator<Y> & other) const { return (_ptr == other.getIteratorType()); }
-
 		template <class Y>
 		bool operator!=(const map_reverse_iterator<Y> & other) const { return (_ptr != other.getIteratorType()); }
-
 		template <class Y>
 		bool operator<(const map_reverse_iterator<Y> & other) const { return (_ptr > other.getIteratorType()); }
-
 		template <class Y>
 		bool operator>(const map_reverse_iterator<Y> & other) const { return (_ptr < other.getIteratorType()); }
-
 		template <class Y>
 		bool operator<=(const map_reverse_iterator<Y> & other) const { return (_ptr >= other.getIteratorType()); }
-
 		template <class Y>
 		bool operator>=(const map_reverse_iterator<Y> & other) const { return (_ptr <= other.getIteratorType()); }
-
-
-		// rm
 
 	private:
 		IteratorType _ptr;
