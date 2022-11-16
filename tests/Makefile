@@ -1,13 +1,10 @@
 
 COMPILER = c++
 FLAGS_DEBUG = --std=c++98 -Wall -Wextra -Werror -fsanitize=address -g3
-FLAGS = --std=c++98 -Wall -Wextra -Werror
-
-main:
-	@$(COMPILER) $(FLAGS)	main.cpp -o main.out 
+FLAGS = --std=c++98 -Wall -Wextra -Werror -g
 
 vector:
-	@$(COMPILER) $(FLAGS)	test.cpp -o test.out 
+	@$(COMPILER) $(FLAGS)	vector.cpp -o vector.out 
 
 map:
 	@$(COMPILER) $(FLAGS)	Map_tests.cpp -o map.out 

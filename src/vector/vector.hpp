@@ -77,7 +77,8 @@ namespace ft
       {
          if (_size == 0)
          {
-            _capacity++;
+            if (_capacity == 0)
+               _capacity++;
             _pointer = _alloc.allocate(_capacity);
          }
          if (_size == _capacity)
