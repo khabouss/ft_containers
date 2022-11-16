@@ -30,7 +30,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing Construct _____________________ \n" << std::endl;
-        ft::map<char, int> first;
+        NS::map<char, int> first;
 
         first['a'] = 10;
         first['b'] = 30;
@@ -41,13 +41,13 @@ int main() {
         printMap(first);
         std::cout << std::endl;
 
-        ft::map<char, int> second(first.begin(), first.end());
+        NS::map<char, int> second(first.begin(), first.end());
         
         std::cout << "second has: ";
         printMap(second);
         std::cout << std::endl;
 
-        ft::map<char, int> third(second);
+        NS::map<char, int> third(second);
         
         std::cout << "third has: ";
         printMap(third);
@@ -58,15 +58,15 @@ int main() {
 
     {
         std::cout << " _________________ Testing operator= _____________________ \n" << std::endl;
-        ft::map<char, int> first;
-        ft::map<char, int> second;
+        NS::map<char, int> first;
+        NS::map<char, int> second;
 
         first['x'] = 8;
         first['y'] = 16;
         first['z'] = 32;
 
         second = first;                // second now contains 3 ints
-        first = ft::map<char, int>(); // and first is now empty
+        first = NS::map<char, int>(); // and first is now empty
 
         std::cout << "Size of first: " << first.size() << '\n';
         std::cout << "Size of second: " << second.size() << '\n';
@@ -77,7 +77,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing begin, end, rend, rbegin _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
         mymap['b'] = 100;
         mymap['a'] = 200;
@@ -98,7 +98,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing empty, size, max_size _____________________ \n" << std::endl;
-        ft::map<char,int> mymap;
+        NS::map<char,int> mymap;
 
         mymap['a'] = 10;
         mymap['b'] = 20;
@@ -120,7 +120,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing operator[] _____________________ \n" << std::endl;
-        ft::map<char, std::string> mymap;
+        NS::map<char, std::string> mymap;
 
         mymap['a'] = "an element";
         mymap['b'] = "another element";
@@ -139,14 +139,14 @@ int main() {
 
     {
         std::cout << " _________________ Testing insert _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
         // first insert function version (single parameter):
-        mymap.insert(ft::pair<char, int>('a', 100));
-        mymap.insert(ft::pair<char, int>('z', 200));
+        mymap.insert(NS::pair<char, int>('a', 100));
+        mymap.insert(NS::pair<char, int>('z', 200));
 
-        ft::pair<ft::map<char, int>::iterator, bool> ret;
-        ret = mymap.insert(ft::pair<char, int>('z', 500));
+        NS::pair<NS::map<char, int>::iterator, bool> ret;
+        ret = mymap.insert(NS::pair<char, int>('z', 500));
         if (ret.second == false)
         {
             std::cout << "element 'z' already existed";
@@ -154,12 +154,12 @@ int main() {
         }
 
         // second insert function version (with hint position):
-        ft::map<char, int>::iterator it = mymap.begin();
-        mymap.insert(it, ft::pair<char, int>('b', 300)); 
-        mymap.insert(it, ft::pair<char, int>('c', 400)); 
+        NS::map<char, int>::iterator it = mymap.begin();
+        mymap.insert(it, NS::pair<char, int>('b', 300)); 
+        mymap.insert(it, NS::pair<char, int>('c', 400)); 
 
         // third insert function version (range insertion):
-        ft::map<char, int> anothermap;
+        NS::map<char, int> anothermap;
         anothermap.insert(mymap.begin(), mymap.find('c'));
 
         // showing contents:
@@ -177,8 +177,8 @@ int main() {
 
     {
         std::cout << " _________________ Testing erase _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
-        ft::map<char, int>::iterator it;
+        NS::map<char, int> mymap;
+        NS::map<char, int>::iterator it;
 
         // insert some values:
         mymap['a'] = 10;
@@ -206,7 +206,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing swap _____________________ \n" << std::endl;
-        ft::map<char, int> foo, bar;
+        NS::map<char, int> foo, bar;
 
         foo['x'] = 100;
         foo['y'] = 200;
@@ -218,11 +218,11 @@ int main() {
         foo.swap(bar);
 
         std::cout << "foo contains:\n";
-        for (ft::map<char, int>::iterator it = foo.begin(); it != foo.end(); ++it)
+        for (NS::map<char, int>::iterator it = foo.begin(); it != foo.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
 
         std::cout << "bar contains:\n";
-        for (ft::map<char, int>::iterator it = bar.begin(); it != bar.end(); ++it)
+        for (NS::map<char, int>::iterator it = bar.begin(); it != bar.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
 
         std::cout << " -------------------------- \n\n" << std::endl;
@@ -231,14 +231,14 @@ int main() {
 
     {
         std::cout << " _________________ Testing clear _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
         mymap['x'] = 100;
         mymap['y'] = 200;
         mymap['z'] = 300;
 
         std::cout << "mymap contains:\n";
-        for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+        for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
 
         mymap.clear();
@@ -246,7 +246,7 @@ int main() {
         mymap['b'] = 2202;
 
         std::cout << "mymap contains:\n";
-        for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+        for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
 
         std::cout << " -------------------------- \n\n" << std::endl;
@@ -255,9 +255,9 @@ int main() {
 
     {
         std::cout << " _________________ Testing key_comp _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
-        ft::map<char, int>::key_compare mycomp = mymap.key_comp();
+        NS::map<char, int>::key_compare mycomp = mymap.key_comp();
 
         mymap['a'] = 100;
         mymap['b'] = 200;
@@ -267,7 +267,7 @@ int main() {
 
         char highest = mymap.rbegin()->first; // key value of last element
 
-        ft::map<char, int>::iterator it = mymap.begin();
+        NS::map<char, int>::iterator it = mymap.begin();
         do
         {
             std::cout << it->first << " => " << it->second << '\n';
@@ -281,7 +281,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing value_comp _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
         mymap['x'] = 1001;
         mymap['y'] = 2002;
@@ -289,9 +289,9 @@ int main() {
 
         std::cout << "mymap contains:\n";
 
-        ft::pair<char, int> highest = *mymap.rbegin(); // last element
+        NS::pair<char, int> highest = *mymap.rbegin(); // last element
 
-        ft::map<char, int>::iterator it = mymap.begin();
+        NS::map<char, int>::iterator it = mymap.begin();
         do
         {
             std::cout << it->first << " => " << it->second << '\n';
@@ -303,8 +303,8 @@ int main() {
 
     {
         std::cout << " _________________ Testing find _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
-        ft::map<char, int>::iterator it;
+        NS::map<char, int> mymap;
+        NS::map<char, int>::iterator it;
 
         mymap['a'] = 50;
         mymap['b'] = 100;
@@ -327,7 +327,7 @@ int main() {
 
     {
         std::cout << " _________________ Testing count _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
         char c;
 
         mymap['a'] = 101;
@@ -350,8 +350,8 @@ int main() {
     {
         std::cout << " _________________ Testing lower_bound _____________________ \n" << std::endl;
 
-        ft::map<char, int> mymap;
-        ft::map<char, int>::iterator itlow, itup;
+        NS::map<char, int> mymap;
+        NS::map<char, int>::iterator itlow, itup;
 
         mymap['a'] = 20;
         mymap['b'] = 40;
@@ -365,7 +365,7 @@ int main() {
         mymap.erase(itlow, itup); // erases [itlow,itup)
 
         // print content:
-        for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+        for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
         std::cout << " -------------------------- \n\n" << std::endl;
     }
@@ -373,8 +373,8 @@ int main() {
 
     {
         std::cout << " _________________ Testing upper_bound _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
-        ft::map<char, int>::iterator itlow, itup;
+        NS::map<char, int> mymap;
+        NS::map<char, int>::iterator itlow, itup;
 
         mymap['a'] = 20;
         mymap['b'] = 40;
@@ -388,7 +388,7 @@ int main() {
         mymap.erase(itlow, itup); // erases [itlow,itup)
 
         // print content:
-        for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+        for (NS::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
             std::cout << it->first << " => " << it->second << '\n';
 
         std::cout << " -------------------------- \n\n" << std::endl;
@@ -398,13 +398,13 @@ int main() {
 
     {
         std::cout << " _________________ Testing equal_range _____________________ \n" << std::endl;
-        ft::map<char, int> mymap;
+        NS::map<char, int> mymap;
 
         mymap['a'] = 10;
         mymap['b'] = 20;
         mymap['c'] = 30;
 
-        ft::pair<ft::map<char, int>::iterator, ft::map<char, int>::iterator> ret;
+        NS::pair<NS::map<char, int>::iterator, NS::map<char, int>::iterator> ret;
         ret = mymap.equal_range('b');
 
         std::cout << "lower bound points to: ";
@@ -420,15 +420,13 @@ int main() {
     {
         std::cout << " _________________ Testing get_allocator _____________________ \n" << std::endl;
         int psize;
-        ft::map<char, int> mymap;
-        ft::pair<const char, int> *p;
+        NS::map<char, int> mymap;
+        NS::pair<const char, int> *p;
 
-        std::allocator<int> all;
         // allocate an array of 5 elements using mymap's allocator:
         p = mymap.get_allocator().allocate(5);
-
         // assign some values to array
-        psize = sizeof(ft::map<char, int>::value_type) * 5;
+        psize = sizeof(NS::map<char, int>::value_type) * 5;
 
         std::cout << "The allocated array has a size of " << psize << " bytes.\n";
 

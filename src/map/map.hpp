@@ -23,7 +23,7 @@ namespace ft
         typedef ft::pair<const key_type, mapped_type> value_type;
         typedef Compare key_compare;
         typedef value_compare value_compare;
-        typedef typename Alloc::template rebind<node>::other allocator_type; // << ??
+        typedef Alloc allocator_type;
         typedef typename allocator_type::reference reference;
         typedef typename allocator_type::const_reference const_reference;
         typedef typename allocator_type::pointer pointer;
@@ -34,7 +34,6 @@ namespace ft
         typedef ft::map_reverse_iterator<const_iterator> const_reverse_iterator;
         typedef typename mapIterator<node, Key, T>::difference_type difference_type;
         typedef typename mapIterator<node, Key, T>::size_type size_type;
-        typedef Alloc pair_allocator
 
         class node
         {
@@ -51,6 +50,8 @@ namespace ft
             key_type const &getKey() { return (data.first); }
             mapped_type &getValue() { return (data.second); }
         };
+
+        typedef typename std::allocator<node > node_allocator;
 
         ft::redBlack<node, Compare> tree;
 
@@ -365,7 +366,7 @@ namespace ft
 
         allocator_type get_allocator() const
         {
-            return (pair_allocator());
+            return (allocator_type());
         }
 
         void initNilNode()
@@ -535,7 +536,7 @@ namespace ft
         }
 
     private:
-        allocator_type _alloc;
+        node_allocator _alloc;
         key_compare _comp;
         node *nil;
     
