@@ -19,7 +19,7 @@ stack: $(OBJS3)
 	$(CPP) $(FLAGS) $(OBJS3) -o $(NAME)
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS1) $(OBJS3) $(OBJS2)
 
 fclean: clean
 	rm -f $(NAME)
