@@ -2,6 +2,8 @@
 #include "../src/map/map.hpp"
 #include "../src/stack/stack.hpp"
 #include "../src/utils/headers.hpp"
+#include <sys/time.h>
+#include <unistd.h>
 #include <memory>
 
 #if 1
@@ -20,13 +22,23 @@ struct classcomp {
 };
 
 template <class T, class K>
-void printMap(NS::map<T, K> v) {
+void printmap(NS::map<T, K> v) {
     for (typename NS::map<T, K>::iterator it = v.begin(); it != v.end(); ++it)
         std::cout << " [" << (*it).first << ", " << (*it).second << "] ";
     std::cout << std::endl;
 }
 
+time_t get_time(void)
+{
+    struct timeval time_now;
+
+    gettimeofday(&time_now, NULL);
+    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
+    return (msecs_time);
+}
+
 int main() {
+
 
     {
         std::cout << " _________________ Testing Construct _____________________ \n" << std::endl;
@@ -38,19 +50,19 @@ int main() {
         first['d'] = 70;
 
         std::cout << "frst has: ";
-        printMap(first);
+        printmap(first);
         std::cout << std::endl;
 
         NS::map<char, int> second(first.begin(), first.end());
         
         std::cout << "second has: ";
-        printMap(second);
+        printmap(second);
         std::cout << std::endl;
 
         NS::map<char, int> third(second);
         
         std::cout << "third has: ";
-        printMap(third);
+        printmap(third);
         std::cout << std::endl;
 
         std::cout << " -------------------------- \n\n" << std::endl;
@@ -88,8 +100,8 @@ int main() {
         // show content:
         std::cout << "begin(): " << (*(mymap.begin())).first << std::endl;
         std::cout << "rbegin(): " << (*(mymap.rbegin())).first << std::endl;
-        std::cout << "end(): " << (*(mymap.end())).first << std::endl;
-        std::cout << "rend(): " << (*(mymap.rend())).first << std::endl;
+        // std::cout << "end(): " << (*(mymap.end())).first << std::endl;
+        // std::cout << "rend(): " << (*(mymap.rend())).first << std::endl;
 
         std::cout << " -------------------------- \n\n" << std::endl;
     }

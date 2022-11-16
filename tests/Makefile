@@ -23,5 +23,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f out*
 
 .PHONY: vector map stack clean fclean

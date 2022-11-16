@@ -2,8 +2,9 @@
 #include "../src/map/map.hpp"
 #include "../src/stack/stack.hpp"
 #include "../src/utils/headers.hpp"
+#include <sys/time.h>
 
-#if 0
+#if 1
     # define NS ft
 #else
     #include <vector>
@@ -11,6 +12,14 @@
     # define NS std
 #endif
 
+time_t get_time(void)
+{
+    struct timeval time_now;
+
+    gettimeofday(&time_now, NULL);
+    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
+    return (msecs_time);
+}
 
 int main() {
 
@@ -124,7 +133,6 @@ int main() {
         std::cout << " -------------------------- \n\n"
                   << std::endl;
     }
-
 
     // while (1);
     return 0;

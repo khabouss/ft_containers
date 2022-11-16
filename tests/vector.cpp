@@ -3,7 +3,7 @@
 #include "../src/stack/stack.hpp"
 #include "../src/utils/headers.hpp"
 
-#if 0
+#if 1
     # define NS ft
 #else
     #include <vector>
