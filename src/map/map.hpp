@@ -8,7 +8,6 @@
 
 namespace ft
 {
-    // edited std
     template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
     class map
     {
@@ -172,15 +171,6 @@ namespace ft
             return (find(k)->second);
         }
 
-        node *findNodeByValue(node *current, const value_type &k) const
-        {
-            if (current == nil || equal2(current->data, k))
-                return (current);
-            else if (_comp(k.first, current->data.first))
-                return (findNodeByValue(current->left, k));
-            else
-                return (findNodeByValue(current->right, k));
-        }
 
         ft::pair<iterator, bool> insert(const value_type &val)
         {
@@ -231,7 +221,7 @@ namespace ft
                 else
                     ptr->parent->right = child;
 
-                removeNode(ptr, child);
+                removeNode(ptr);
             }
         }
 
@@ -369,11 +359,23 @@ namespace ft
             return (allocator_type());
         }
 
+    private:
+
         void initNilNode()
         {
             nil = _alloc.allocate(1);
             constructNode(nil);
             nil->color = BLACK;
+        }
+
+        node *findNodeByValue(node *current, const value_type &k) const
+        {
+            if (current == nil || equal2(current->data, k))
+                return (current);
+            else if (_comp(k.first, current->data.first))
+                return (findNodeByValue(current->left, k));
+            else
+                return (findNodeByValue(current->right, k));
         }
 
         node *makeNode(const value_type &val = value_type())
@@ -458,9 +460,8 @@ namespace ft
                 nil->right = a;
         }
 
-        void removeNode(node *ptr, node *child)
+        void removeNode(node *ptr)
         {
-            (void)child;
             tree.deleteNode2(ptr, nil, _comp);
             tree.decSize();
             _alloc.destroy(ptr);
@@ -512,30 +513,6 @@ namespace ft
             return (_comp(lhs.first, rhs.first) == false && _comp(rhs.first, lhs.first) == false);
         }
 
-        void printHelper(node* root, std::string indent, bool last)
-        {
-            if (root != nil)
-            {
-                std::cout << indent;
-                if (last)
-                {
-                    std::cout << "R----";
-                    indent += "   ";
-                }
-                else
-                {
-                    std::cout << "L----";
-                    indent += "|  ";
-                }
-
-                std::string sColor = root->color == 1 ? "R" : "B";
-                std::cout << root->data.first << "(" << sColor << ")" << std::endl;
-                printHelper(root->left, indent, false);
-                printHelper(root->right, indent, true);
-            }
-        }
-
-    private:
         node_allocator _alloc;
         key_compare _comp;
         node *nil;
