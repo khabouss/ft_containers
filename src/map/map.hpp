@@ -34,6 +34,7 @@ namespace ft
         typedef ft::map_reverse_iterator<const_iterator> const_reverse_iterator;
         typedef typename mapIterator<node, Key, T>::difference_type difference_type;
         typedef typename mapIterator<node, Key, T>::size_type size_type;
+        typedef Alloc pair_allocator
 
         class node
         {
@@ -364,7 +365,7 @@ namespace ft
 
         allocator_type get_allocator() const
         {
-            return (allocator_type());
+            return (pair_allocator());
         }
 
         void initNilNode()
